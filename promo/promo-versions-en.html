@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pzhisen — 5 Vertical Promo Videos (English)</title>
-  <meta name="description" content="Five vertical promo versions featuring different successful American founders explaining how to use Pzhisen AI agents 24/7. English narration with burned-in subtitles.">
+  <meta name="description" content="Five vertical promo versions featuring different successful American founders explaining how to use Pzhisen AI agents 24/7. English narration with burned-in subtitles. One-tap ZIP download for phones.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -32,9 +32,44 @@
       line-height: 1.15; margin: 0 0 12px;
     }
     .promo-sub {
-      font-size: 1.05rem; color: var(--body); max-width: 720px;
-      line-height: 1.65; margin: 0 0 36px;
+      font-size: 1.05rem; color: var(--body); max-width: 760px;
+      line-height: 1.75; margin: 0 0 24px;
     }
+    .download-all {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      margin: 0 0 36px;
+      padding: 18px 20px;
+      background: rgba(15, 23, 42, 0.92);
+      color: #f8fafc;
+      border-radius: 14px;
+      box-shadow: 0 16px 40px rgba(15, 23, 42, 0.18);
+    }
+    .download-all p {
+      margin: 0;
+      flex: 1 1 220px;
+      font-size: 0.95rem;
+      line-height: 1.55;
+      color: rgba(248, 250, 252, 0.88);
+    }
+    .download-all strong { color: #fff; }
+    .btn-dl-all {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 12px 22px;
+      border-radius: 10px;
+      background: #38bdf8;
+      color: #0f172a;
+      font-weight: 700;
+      font-size: 1rem;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .btn-dl-all:hover { background: #7dd3fc; }
     .grid {
       display: grid;
       gap: 28px;
@@ -66,12 +101,27 @@
     .video-shell video {
       width: 100%; height: 100%; display: block; background: #0f172a;
     }
-    .dl {
-      display: inline-block; margin-top: 12px;
-      font-size: 0.9rem; font-weight: 600; color: var(--primary-600);
-      text-decoration: none;
+    .dl-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+      justify-content: center;
     }
-    .dl:hover { text-decoration: underline; }
+    .dl {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 10px 16px;
+      border-radius: 10px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      text-decoration: none;
+      background: var(--primary-600, #0284c7);
+      color: #fff;
+    }
+    .dl:hover { filter: brightness(1.08); }
     .site-nav.promo-nav {
       position: fixed; top: 0; right: 0; left: 0;
       padding: 18px 28px; display: flex; justify-content: flex-end; gap: 18px;
@@ -88,11 +138,19 @@
     }
     .alt-link a { color: var(--primary-600); font-weight: 600; text-decoration: none; }
     .alt-link a:hover { text-decoration: underline; }
+    .tip {
+      margin-top: 28px;
+      font-size: 0.92rem;
+      color: var(--caption);
+      line-height: 1.65;
+      max-width: 720px;
+    }
   </style>
 </head>
 <body>
   <nav class="site-nav promo-nav" aria-label="Main">
     <a href="/promo-versions.html">中文五版本</a>
+    <a href="/download-videos-en.html">Download page</a>
     <a href="/promo-video.html">Original EN</a>
     <a href="/">Home</a>
     <a href="/pricing.html">Pricing</a>
@@ -100,77 +158,112 @@
 
   <main class="promo-page">
     <div class="promo-wrap">
-      <p class="promo-kicker">5 vertical versions · English · 1080×1920</p>
+      <p class="promo-kicker">5 vertical versions · English · burned-in subtitles · 1080×1920</p>
       <h1 class="promo-title">Pzhisen promo pack — five American founder cuts</h1>
       <p class="promo-sub">
-        Each version features a different successful U.S. presenter explaining how anyone can use
-        <a href="https://pzhisen.online">pzhisen.online</a> AI agents 24/7/365 for tweets, videos,
-        email outreach, support replies, market analysis, and multi-platform publishing —
-        with burned-in English subtitles.
+        Each cut features a different successful U.S. presenter explaining, in detail, how anyone
+        worldwide can use <a href="https://pzhisen.online">pzhisen.online</a> AI agents 24/7/365 —
+        never sleeping — to auto-create promotional tweets, videos, and email copy for mainstream
+        inboxes; auto-reply to customers; analyze competitiveness, sales, and market trends;
+        publish to YouTube, TikTok, X, Facebook, WeChat Channels, Douyin, Tencent Video, Kuaishou,
+        Xiaohongshu, and more; and grow personal or enterprise websites — capped by the result that
+        matters most: helping thousands of individuals and businesses worldwide generate
+        <strong>$1,000,000 in a single month</strong> through AI-powered promotion.
       </p>
+
+      <div class="download-all">
+        <p>
+          <strong>Phone download:</strong> tap below to download all 5 vertical videos in one ZIP (~85MB).
+          Or download each MP4 under its player.
+        </p>
+        <a class="btn-dl-all"
+           href="https://github.com/leedh994-a11y/Pzhisen/raw/cursor/en-promo-5pack-vertical-b48d/promo/versions/pzhisen-promo-en-5videos-vertical.zip"
+           download="Pzhisen-EN-5vertical-videos.zip">
+          ⬇ Download all 5 (ZIP)
+        </a>
+      </div>
 
       <div class="grid">
         <article class="card">
           <h2>V1 · Michael</h2>
-          <p class="meta">en-US-ChristopherNeural · ~2:11</p>
+          <p class="meta">~2:11 · 18MB · American founder</p>
           <div class="video-shell">
             <video controls playsinline preload="metadata" poster="promo/assets/versions/v1/front.png"
               title="Pzhisen vertical promo V1 — Michael">
               <source src="promo/versions/pzhisen-promo-v1-vertical.mp4" type="video/mp4">
             </video>
           </div>
-          <a class="dl" href="promo/versions/pzhisen-promo-v1-vertical.mp4" download>Download V1</a>
+          <div class="dl-row">
+            <a class="dl" href="https://github.com/leedh994-a11y/Pzhisen/raw/cursor/en-promo-5pack-vertical-b48d/promo/versions/pzhisen-promo-v1-vertical.mp4"
+               download="Pzhisen-EN-V1-Michael.mp4">Download V1 MP4</a>
+          </div>
         </article>
 
         <article class="card">
           <h2>V2 · David</h2>
-          <p class="meta">en-US-GuyNeural · ~1:58</p>
+          <p class="meta">~1:58 · 16MB · U.S. entrepreneur</p>
           <div class="video-shell">
             <video controls playsinline preload="metadata" poster="promo/assets/versions/v2/front.png"
               title="Pzhisen vertical promo V2 — David">
               <source src="promo/versions/pzhisen-promo-v2-vertical.mp4" type="video/mp4">
             </video>
           </div>
-          <a class="dl" href="promo/versions/pzhisen-promo-v2-vertical.mp4" download>Download V2</a>
+          <div class="dl-row">
+            <a class="dl" href="https://github.com/leedh994-a11y/Pzhisen/raw/cursor/en-promo-5pack-vertical-b48d/promo/versions/pzhisen-promo-v2-vertical.mp4"
+               download="Pzhisen-EN-V2-David.mp4">Download V2 MP4</a>
+          </div>
         </article>
 
         <article class="card">
           <h2>V3 · James</h2>
-          <p class="meta">en-US-EricNeural · ~2:13</p>
+          <p class="meta">~2:13 · 19MB · U.S. product founder</p>
           <div class="video-shell">
             <video controls playsinline preload="metadata" poster="promo/assets/versions/v3/front.png"
               title="Pzhisen vertical promo V3 — James">
               <source src="promo/versions/pzhisen-promo-v3-vertical.mp4" type="video/mp4">
             </video>
           </div>
-          <a class="dl" href="promo/versions/pzhisen-promo-v3-vertical.mp4" download>Download V3</a>
+          <div class="dl-row">
+            <a class="dl" href="https://github.com/leedh994-a11y/Pzhisen/raw/cursor/en-promo-5pack-vertical-b48d/promo/versions/pzhisen-promo-v3-vertical.mp4"
+               download="Pzhisen-EN-V3-James.mp4">Download V3 MP4</a>
+          </div>
         </article>
 
         <article class="card">
           <h2>V4 · Carlos</h2>
-          <p class="meta">en-US-RogerNeural · ~2:27</p>
+          <p class="meta">~2:27 · 17MB · U.S. global marketer</p>
           <div class="video-shell">
             <video controls playsinline preload="metadata" poster="promo/assets/versions/v4/front.png"
               title="Pzhisen vertical promo V4 — Carlos">
               <source src="promo/versions/pzhisen-promo-v4-vertical.mp4" type="video/mp4">
             </video>
           </div>
-          <a class="dl" href="promo/versions/pzhisen-promo-v4-vertical.mp4" download>Download V4</a>
+          <div class="dl-row">
+            <a class="dl" href="https://github.com/leedh994-a11y/Pzhisen/raw/cursor/en-promo-5pack-vertical-b48d/promo/versions/pzhisen-promo-v4-vertical.mp4"
+               download="Pzhisen-EN-V4-Carlos.mp4">Download V4 MP4</a>
+          </div>
         </article>
 
         <article class="card">
           <h2>V5 · William</h2>
-          <p class="meta">en-US-BrianNeural · ~2:07</p>
+          <p class="meta">~2:07 · 17MB · American executive</p>
           <div class="video-shell">
             <video controls playsinline preload="metadata" poster="promo/assets/versions/v5/front.png"
               title="Pzhisen vertical promo V5 — William">
               <source src="promo/versions/pzhisen-promo-v5-vertical.mp4" type="video/mp4">
             </video>
           </div>
-          <a class="dl" href="promo/versions/pzhisen-promo-v5-vertical.mp4" download>Download V5</a>
+          <div class="dl-row">
+            <a class="dl" href="https://github.com/leedh994-a11y/Pzhisen/raw/cursor/en-promo-5pack-vertical-b48d/promo/versions/pzhisen-promo-v5-vertical.mp4"
+               download="Pzhisen-EN-V5-William.mp4">Download V5 MP4</a>
+          </div>
         </article>
       </div>
 
+      <p class="tip">
+        Prefer a lighter mobile page? Open
+        <a href="/download-videos-en.html">/download-videos-en.html</a>.
+      </p>
       <p class="alt-link">Looking for the Chinese five-pack? Open <a href="/promo-versions.html">中文五版本</a>.</p>
     </div>
   </main>
