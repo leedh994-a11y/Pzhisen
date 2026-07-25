@@ -23,4 +23,4 @@ Each video includes burned-in **English subtitles**, U.S. male narration, and co
 
 ## Direct ZIP download
 
-https://github.com/leedh994-a11y/leedh994-a11y.github.io/raw/main/pzhisen/promo/versions/pzhisen-promo-en-5videos-vertical.zip
+https://github.com/leedh994-a11y/Pzhisen/raw/cursor/en-promo-5pack-vertical-b48d/promo/versions/pzhisen-promo-en-5videos-vertical.zip
