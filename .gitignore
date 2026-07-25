@@ -17,5 +17,4 @@ promo/assets/versions-en-v4/**/narration.*
 promo/assets/versions-en-v4/**/duration.txt
 promo/assets/versions-en-v4/**/script.txt
 promo/versions-en-v4/*-silent.mp4
-# Combined ZIP exceeds GitHub 100MB file limit — keep MP4s individually
-promo/versions-en-v4/*.zip
+# phone ZIP is under 100MB and tracked

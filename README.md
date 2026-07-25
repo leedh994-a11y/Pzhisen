@@ -15,7 +15,7 @@ Brand-new vertical cuts with **different presenters, scripts, voices, pacing, an
 - Format: 1080×1920 · English burned-in subtitles · ~1:44–2:05 each
 - Players: `promo/promo-versions-en4.html`
 - Mobile download: `promo/download-videos-en4.html`
-- Note: combined ZIP exceeds GitHub’s 100MB file limit — download the five MP4s individually from the pages above.
+- Phone ZIP (all 5, ~57MB): https://github.com/leedh994-a11y/Pzhisen/raw/main/promo/versions-en-v4/pzhisen-promo-en4-5videos-vertical.zip
 
 Rebuild:
 
