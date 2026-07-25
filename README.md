@@ -1,26 +1,31 @@
-# Pzhisen — English 5-pack vertical promo videos
+# Pzhisen promo videos
 
-Five vertical (1080×1920) English promo videos featuring different successful American presenters explaining how to use [pzhisen.online](https://pzhisen.online) AI agents 24/7 for automated marketing.
+## NEW English 5-pack (unique — not prior versions)
 
-## Watch online
+Brand-new vertical cuts with **different presenters, scripts, voices, and visuals** from any previous pack.
 
-- **Players + downloads:** https://pzhisen.online/promo-versions-en.html
-- **Mobile download page:** https://pzhisen.online/download-videos-en.html
-- **Chinese 5-pack:** https://pzhisen.online/promo-versions.html
-
-## Files in this repo
-
-| File | Presenter | Duration |
+| Version | Presenter | File |
 |---|---|---|
-| `promo/versions/pzhisen-promo-v1-vertical.mp4` | Michael | ~2:11 |
-| `promo/versions/pzhisen-promo-v2-vertical.mp4` | David | ~1:58 |
-| `promo/versions/pzhisen-promo-v3-vertical.mp4` | James | ~2:13 |
-| `promo/versions/pzhisen-promo-v4-vertical.mp4` | Carlos | ~2:27 |
-| `promo/versions/pzhisen-promo-v5-vertical.mp4` | William | ~2:07 |
-| `promo/versions/pzhisen-promo-en-5videos-vertical.zip` | All 5 | ~85MB |
+| V1 | Ryan | `promo/versions-en-v2/pzhisen-promo-en2-v1-vertical.mp4` |
+| V2 | Marcus | `promo/versions-en-v2/pzhisen-promo-en2-v2-vertical.mp4` |
+| V3 | Ethan | `promo/versions-en-v2/pzhisen-promo-en2-v3-vertical.mp4` |
+| V4 | Noah | `promo/versions-en-v2/pzhisen-promo-en2-v4-vertical.mp4` |
+| V5 | Jackson | `promo/versions-en-v2/pzhisen-promo-en2-v5-vertical.mp4` |
 
-Each video includes burned-in **English subtitles**, U.S. male narration, and covers: 24/7 AI agents, tweets/videos/email outreach, customer support, market & sales analysis, publishing to YouTube / TikTok / X / Facebook / Douyin / Xiaohongshu / more, and the $1M / month outcome story.
+- Format: 1080×1920 · English burned-in subtitles
+- Players: `promo/promo-versions-en2.html`
+- Mobile download: `promo/download-videos-en2.html`
+- ZIP: https://github.com/leedh994-a11y/Pzhisen/raw/main/promo/versions-en-v2/pzhisen-promo-en2-5videos-vertical.zip
 
-## Direct ZIP download
+Rebuild:
 
-https://github.com/leedh994-a11y/Pzhisen/raw/main/promo/versions/pzhisen-promo-en-5videos-vertical.zip
+```bash
+cd promo
+python3 scripts/make_narration_versions_en_v2.py
+python3 scripts/build_versions_vertical_en_v2.py all
+```
+
+## Previous English 5-pack (kept for reference)
+
+Michael / David / James / Carlos / William — `promo/versions/`  
+Page: `promo/promo-versions-en.html`
