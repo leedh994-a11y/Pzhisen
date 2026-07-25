@@ -5,3 +5,9 @@ promo/assets/versions-en-v2/**/narration.*
 promo/assets/versions-en-v2/**/duration.txt
 promo/assets/versions-en-v2/**/script.txt
 promo/versions-en-v2/*-silent.mp4
+
+# v3 intermediate TTS / silent renders (keep PNGs + final MP4s)
+promo/assets/versions-en-v3/**/narration.*
+promo/assets/versions-en-v3/**/duration.txt
+promo/assets/versions-en-v3/**/script.txt
+promo/versions-en-v3/*-silent.mp4
