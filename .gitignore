@@ -11,3 +11,10 @@ promo/assets/versions-en-v3/**/narration.*
 promo/assets/versions-en-v3/**/duration.txt
 promo/assets/versions-en-v3/**/script.txt
 promo/versions-en-v3/*-silent.mp4
+
+# v4 intermediate TTS / silent renders (keep PNGs + final MP4s)
+promo/assets/versions-en-v4/**/narration.*
+promo/assets/versions-en-v4/**/duration.txt
+promo/assets/versions-en-v4/**/script.txt
+promo/versions-en-v4/*-silent.mp4
+# phone ZIP is under 100MB and tracked
