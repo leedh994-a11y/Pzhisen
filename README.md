@@ -4,10 +4,13 @@
 
 Edited vertical cut from the shared WeChat/Tencent source clip:
 
-- **手机一键下载（MP4 · 约48MB）：** https://github.com/leedh994-a11y/Pzhisen/raw/main/promo/versions-zh-edit/pzhisen-bob-from-polsia-vertical.mp4
-- Output: `promo/versions-zh-edit/pzhisen-bob-from-polsia-vertical.mp4`
-- Player / download page: `promo/download-polsia-edit.html`
-- Rebuild: `python3 promo/scripts/edit_polsia_to_pzhisen_bob.py --src <source.mp4> --out promo/versions-zh-edit/pzhisen-bob-from-polsia-vertical.mp4`
+- **手机一键下载（中文剪辑 · 约48MB）：** https://github.com/leedh994-a11y/Pzhisen/raw/main/promo/versions-zh-edit/pzhisen-bob-from-polsia-vertical.mp4
+- **手机一键下载（英文旁白版 · 约35MB）：** https://github.com/leedh994-a11y/Pzhisen/raw/main/promo/versions-zh-edit/pzhisen-bob-english-vertical.mp4
+- English cut: English TTS + English captions; closing line includes `https://pzhisen.online`
+- Outputs: `promo/versions-zh-edit/pzhisen-bob-from-polsia-vertical.mp4`, `promo/versions-zh-edit/pzhisen-bob-english-vertical.mp4`
+- Download pages: `promo/download-polsia-edit.html`, `promo/download-polsia-edit-en.html`
+- Rebuild ZH names: `python3 promo/scripts/edit_polsia_to_pzhisen_bob.py --src <source.mp4> --out promo/versions-zh-edit/pzhisen-bob-from-polsia-vertical.mp4`
+- Rebuild EN narration: `python3 promo/scripts/make_polsia_edit_english.py --src <zh-edited.mp4> --out promo/versions-zh-edit/pzhisen-bob-english-vertical.mp4`
 
 ## NEW English 5-pack v8 (unique — not prior versions)
 
