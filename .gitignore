@@ -26,3 +26,10 @@ promo/assets/versions-en-v5/**/script.txt
 promo/versions-en-v5/*-silent.mp4
 # also ignore ASS subtitle intermediates if present
 promo/assets/versions-en-v5/**/*.ass
+
+# v6 intermediate TTS / silent renders (keep PNGs + final MP4s)
+promo/assets/versions-en-v6/**/narration.*
+promo/assets/versions-en-v6/**/duration.txt
+promo/assets/versions-en-v6/**/script.txt
+promo/versions-en-v6/*-silent.mp4
+promo/assets/versions-en-v6/**/*.ass
