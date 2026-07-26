@@ -1,29 +1,34 @@
 # Pzhisen promo videos
 
-## NEW English 5-pack v6 (unique — not prior versions)
+## NEW English 5-pack v7 (unique — not prior versions)
 
-Brand-new vertical cuts with **different presenters, scripts, voices, pacing, and per-video website UI screenshots** from every previous pack (v1–v5).
+Brand-new vertical cuts with **different presenters, scripts, voices, pacing, and per-video website UI screenshots** from every previous pack (v1–v6).
 
 | Version | Presenter | Look | UI style | File |
 |---|---|---|---|---|
-| V1 | Austin | Seattle waterfront loft | Slate indigo SaaS | `promo/versions-en-v6/pzhisen-promo-en6-v1-vertical.mp4` |
-| V2 | Garrett | Texas hill-country ranch | Terracotta sage warm | `promo/versions-en-v6/pzhisen-promo-en6-v2-vertical.mp4` |
-| V3 | Wesley | Miami marina lounge | Aqua coral lifestyle | `promo/versions-en-v6/pzhisen-promo-en6-v3-vertical.mp4` |
-| V4 | Spencer | Boston private library | Burgundy cream classic | `promo/versions-en-v6/pzhisen-promo-en6-v4-vertical.mp4` |
-| V5 | Elliot | Denver mountain cabin | Frost teal alpine | `promo/versions-en-v6/pzhisen-promo-en6-v5-vertical.mp4` |
+| V1 | Chandler | NYC Midtown glass office | Charcoal champagne luxury | `promo/versions-en-v7/pzhisen-promo-en7-v1-vertical.mp4` |
+| V2 | Brooks | Chicago Loop loft | Steel-blue ice corporate | `promo/versions-en-v7/pzhisen-promo-en7-v2-vertical.mp4` |
+| V3 | Hayden | Santa Monica creative loft | Sand coral lifestyle | `promo/versions-en-v7/pzhisen-promo-en7-v3-vertical.mp4` |
+| V4 | Reid | Portland industrial loft | Moss charcoal calm | `promo/versions-en-v7/pzhisen-promo-en7-v4-vertical.mp4` |
+| V5 | Nash | Atlanta high-rise boardroom | Navy amber executive | `promo/versions-en-v7/pzhisen-promo-en7-v5-vertical.mp4` |
 
-- Format: 1080×1920 · English burned-in subtitles · ~1:45–2:05 each
-- Players: `promo/promo-versions-en6.html`
-- Mobile download page: `promo/download-videos-en6.html`
-- Phone ZIP (all 5, ~80MB): https://github.com/leedh994-a11y/Pzhisen/raw/main/promo/versions-en-v6/pzhisen-promo-en6-5videos-vertical.zip
+- Format: 1080×1920 · English burned-in subtitles · ~1:45–2:20 each
+- Players: `promo/promo-versions-en7.html`
+- Mobile download page: `promo/download-videos-en7.html`
+- Phone ZIP (all 5, ~81MB): https://github.com/leedh994-a11y/Pzhisen/raw/main/promo/versions-en-v7/pzhisen-promo-en7-5videos-vertical.zip
 
 Rebuild:
 
 ```bash
 cd promo
-python3 scripts/make_narration_versions_en_v6.py
-python3 scripts/build_versions_vertical_en_v6.py all
+python3 scripts/make_narration_versions_en_v7.py
+python3 scripts/build_versions_vertical_en_v7.py all
 ```
+
+## Previous English 5-pack v6 (kept for reference)
+
+Austin / Garrett / Wesley / Spencer / Elliot — `promo/versions-en-v6/`  
+Page: `promo/promo-versions-en6.html`
 
 ## Previous English 5-pack v5 (kept for reference)
 
@@ -37,7 +42,7 @@ Page: `promo/promo-versions-en4.html`
 
 ## Previous English 5-pack v3 (kept for reference)
 
-Brandon / Tyler / Christopher / Adrian / Preston — `promo/versions-en-v3/`  
+Brandon / Trevor / Christopher / Adrian / Preston — `promo/versions-en-v3/`  
 Page: `promo/promo-versions-en3.html`
 
 ## Previous English 5-pack v2 (kept for reference)
