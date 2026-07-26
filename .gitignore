@@ -33,3 +33,10 @@ promo/assets/versions-en-v6/**/duration.txt
 promo/assets/versions-en-v6/**/script.txt
 promo/versions-en-v6/*-silent.mp4
 promo/assets/versions-en-v6/**/*.ass
+
+# v7 intermediate TTS / silent renders (keep PNGs + final MP4s)
+promo/assets/versions-en-v7/**/narration.*
+promo/assets/versions-en-v7/**/duration.txt
+promo/assets/versions-en-v7/**/script.txt
+promo/versions-en-v7/*-silent.mp4
+promo/assets/versions-en-v7/**/*.ass
