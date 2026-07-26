@@ -1,5 +1,13 @@
 # Pzhisen promo videos
 
+## Chinese edit: Polsia → Pzhisen, founder → Bob
+
+Edited vertical cut from the shared WeChat/Tencent source clip:
+
+- Output: `promo/versions-zh-edit/pzhisen-bob-from-polsia-vertical.mp4`
+- Player / download: `promo/download-polsia-edit.html`
+- Rebuild: `python3 promo/scripts/edit_polsia_to_pzhisen_bob.py --src <source.mp4> --out promo/versions-zh-edit/pzhisen-bob-from-polsia-vertical.mp4`
+
 ## NEW English 5-pack v8 (unique — not prior versions)
 
 Brand-new vertical cuts with **different presenters, scripts, voices, pacing, and per-video website UI screenshots** from every previous pack (v1–v7).

@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pzhisen · Polsia→Pzhisen / Ben→Bob 剪辑版</title>
+  <style>
+    :root {
+      --bg0: #0f1419;
+      --bg1: #1a2330;
+      --ink: #f3f6fa;
+      --muted: #9aabbc;
+      --accent: #d4a24c;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Segoe UI", "PingFang SC", "Noto Sans SC", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(1200px 600px at 20% -10%, #2a3a4f 0%, transparent 55%),
+        radial-gradient(900px 500px at 100% 10%, #3a2e1c 0%, transparent 50%),
+        linear-gradient(160deg, var(--bg0), var(--bg1));
+    }
+    main {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 2.5rem 1.25rem 3rem;
+    }
+    h1 {
+      margin: 0 0 0.4rem;
+      font-size: clamp(1.6rem, 4vw, 2.2rem);
+      letter-spacing: 0.02em;
+    }
+    p { color: var(--muted); line-height: 1.55; }
+    .card {
+      margin-top: 1.5rem;
+      padding: 1rem;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(0,0,0,0.25);
+      border-radius: 14px;
+    }
+    video {
+      width: 100%;
+      max-height: 70vh;
+      border-radius: 10px;
+      background: #000;
+    }
+    a.btn {
+      display: inline-block;
+      margin-top: 1rem;
+      padding: 0.75rem 1.2rem;
+      border-radius: 10px;
+      background: var(--accent);
+      color: #1a1208;
+      font-weight: 700;
+      text-decoration: none;
+    }
+    ul { color: var(--muted); }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Pzhisen 剪辑版</h1>
+    <p>源视频中的 <strong style="color:var(--ink)">Polsia → Pzhisen</strong>，创始人 <strong style="color:var(--ink)">Ben/Cera → Bob</strong>。</p>
+    <div class="card">
+      <video controls playsinline preload="metadata"
+        src="versions-zh-edit/pzhisen-bob-from-polsia-vertical.mp4"></video>
+      <a class="btn" href="versions-zh-edit/pzhisen-bob-from-polsia-vertical.mp4" download>
+        下载 MP4（约 76MB）
+      </a>
+      <ul>
+        <li>分辨率 1080×1920 · 时长约 2:15</li>
+        <li>画面硬字幕已替换；口播对应位置已压低并补上新名称</li>
+      </ul>
+    </div>
+  </main>
+</body>
+</html>
