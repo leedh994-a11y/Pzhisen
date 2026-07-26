@@ -4,8 +4,9 @@
 
 Edited vertical cut from the shared WeChat/Tencent source clip:
 
+- **手机一键下载（MP4 · 约48MB）：** https://github.com/leedh994-a11y/Pzhisen/raw/main/promo/versions-zh-edit/pzhisen-bob-from-polsia-vertical.mp4
 - Output: `promo/versions-zh-edit/pzhisen-bob-from-polsia-vertical.mp4`
-- Player / download: `promo/download-polsia-edit.html`
+- Player / download page: `promo/download-polsia-edit.html`
 - Rebuild: `python3 promo/scripts/edit_polsia_to_pzhisen_bob.py --src <source.mp4> --out promo/versions-zh-edit/pzhisen-bob-from-polsia-vertical.mp4`
 
 ## NEW English 5-pack v8 (unique — not prior versions)
