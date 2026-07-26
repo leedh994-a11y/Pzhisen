@@ -1,80 +1,105 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Pzhisen · Polsia→Pzhisen / Ben→Bob 剪辑版</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>下载 Pzhisen 剪辑版视频（手机直链）</title>
+  <meta name="description" content="一键下载 Polsia→Pzhisen、创始人→Bob 的竖屏剪辑视频到手机">
   <style>
     :root {
-      --bg0: #0f1419;
-      --bg1: #1a2330;
-      --ink: #f3f6fa;
+      --bg: #0f1419;
+      --card: #1a2330;
+      --text: #f3f6fa;
       --muted: #9aabbc;
       --accent: #d4a24c;
+      --accent-2: #38bdf8;
     }
     * { box-sizing: border-box; }
     body {
       margin: 0;
-      min-height: 100vh;
-      font-family: "Segoe UI", "PingFang SC", "Noto Sans SC", sans-serif;
-      color: var(--ink);
+      font-family: "PingFang SC", "Noto Sans SC", "Microsoft YaHei", system-ui, sans-serif;
       background:
-        radial-gradient(1200px 600px at 20% -10%, #2a3a4f 0%, transparent 55%),
-        radial-gradient(900px 500px at 100% 10%, #3a2e1c 0%, transparent 50%),
-        linear-gradient(160deg, var(--bg0), var(--bg1));
+        radial-gradient(ellipse 80% 50% at 80% 0%, #3a2e1c, transparent 55%),
+        radial-gradient(ellipse 60% 40% at 10% 100%, #1e3a5f, transparent 50%),
+        var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 28px 18px 48px;
     }
-    main {
-      max-width: 720px;
-      margin: 0 auto;
-      padding: 2.5rem 1.25rem 3rem;
+    .wrap { max-width: 520px; margin: 0 auto; }
+    h1 { font-size: 1.55rem; line-height: 1.3; margin: 0 0 10px; }
+    p { color: var(--muted); line-height: 1.65; margin: 0 0 18px; }
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      min-height: 54px;
+      margin: 0 0 12px;
+      padding: 14px 16px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1.08rem;
+      color: #1a1208;
+      background: var(--accent);
     }
-    h1 {
-      margin: 0 0 0.4rem;
-      font-size: clamp(1.6rem, 4vw, 2.2rem);
-      letter-spacing: 0.02em;
+    .btn.all { background: var(--accent-2); color: #0c4a6e; margin-bottom: 18px; }
+    .meta { font-size: 0.85rem; color: var(--muted); margin: -6px 0 18px; }
+    .tip {
+      margin-top: 8px;
+      padding: 14px 16px;
+      border-radius: 12px;
+      background: rgba(212, 162, 76, 0.08);
+      border: 1px solid rgba(212, 162, 76, 0.22);
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.6;
     }
-    p { color: var(--muted); line-height: 1.55; }
-    .card {
-      margin-top: 1.5rem;
-      padding: 1rem;
-      border: 1px solid rgba(255,255,255,0.08);
-      background: rgba(0,0,0,0.25);
-      border-radius: 14px;
+    .link {
+      word-break: break-all;
+      font-size: 0.82rem;
+      color: #c9d7e8;
+      background: rgba(0,0,0,0.28);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin: 0 0 18px;
     }
     video {
       width: 100%;
-      max-height: 70vh;
-      border-radius: 10px;
+      max-height: 55vh;
+      border-radius: 12px;
       background: #000;
+      margin: 0 0 16px;
     }
-    a.btn {
-      display: inline-block;
-      margin-top: 1rem;
-      padding: 0.75rem 1.2rem;
-      border-radius: 10px;
-      background: var(--accent);
-      color: #1a1208;
-      font-weight: 700;
-      text-decoration: none;
-    }
-    ul { color: var(--muted); }
   </style>
 </head>
 <body>
-  <main>
-    <h1>Pzhisen 剪辑版</h1>
-    <p>源视频中的 <strong style="color:var(--ink)">Polsia → Pzhisen</strong>，创始人 <strong style="color:var(--ink)">Ben/Cera → Bob</strong>。</p>
-    <div class="card">
-      <video controls playsinline preload="metadata"
-        src="versions-zh-edit/pzhisen-bob-from-polsia-vertical.mp4"></video>
-      <a class="btn" href="versions-zh-edit/pzhisen-bob-from-polsia-vertical.mp4" download>
-        下载 MP4（约 76MB）
-      </a>
-      <ul>
-        <li>分辨率 1080×1920 · 时长约 2:15</li>
-        <li>画面硬字幕已替换；口播对应位置已压低并补上新名称</li>
-      </ul>
+  <div class="wrap">
+    <h1>下载 Pzhisen 剪辑版</h1>
+    <p>Polsia → <strong style="color:var(--text)">Pzhisen</strong> · 创始人 → <strong style="color:var(--text)">Bob</strong> · 竖屏 1080×1920 · 约 2:15 · 约 48MB</p>
+
+    <a class="btn all"
+       href="https://github.com/leedh994-a11y/Pzhisen/raw/main/promo/versions-zh-edit/pzhisen-bob-from-polsia-vertical.mp4"
+       download="pzhisen-bob-from-polsia-vertical.mp4">
+      ⬇ 一键下载到手机（MP4）
+    </a>
+    <p class="meta">手机点上方蓝色按钮即可下载。若只打开预览，请长按链接选「下载」。</p>
+
+    <div class="link">
+      直链（可复制到微信/浏览器打开）：<br>
+      https://github.com/leedh994-a11y/Pzhisen/raw/main/promo/versions-zh-edit/pzhisen-bob-from-polsia-vertical.mp4
     </div>
-  </main>
+
+    <video controls playsinline preload="metadata"
+      src="https://github.com/leedh994-a11y/Pzhisen/raw/main/promo/versions-zh-edit/pzhisen-bob-from-polsia-vertical.mp4"></video>
+
+    <div class="tip">
+      <strong>手机操作：</strong><br>
+      iPhone：Safari / Chrome 打开按钮 → 下载到「文件」App。<br>
+      Android：Chrome 打开按钮 → 在「下载」文件夹找到 MP4。<br>
+      微信内置浏览器若无法下载，点右上角「···」→ 用系统浏览器打开本页。
+    </div>
+  </div>
 </body>
 </html>
