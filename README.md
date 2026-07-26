@@ -1,29 +1,34 @@
 # Pzhisen promo videos
 
-## NEW English 5-pack v4 (unique — not prior versions)
+## NEW English 5-pack v5 (unique — not prior versions)
 
-Brand-new vertical cuts with **different presenters, scripts, voices, pacing, and per-video website UI screenshots** from every previous pack.
+Brand-new vertical cuts with **different presenters, scripts, voices, pacing, and per-video website UI screenshots** from every previous pack (v1–v4).
 
 | Version | Presenter | Look | UI style | File |
 |---|---|---|---|---|
-| V1 | Derek | Coastal loft morning | Teal mint SaaS | `promo/versions-en-v4/pzhisen-promo-en4-v1-vertical.mp4` |
-| V2 | Cole | Industrial warehouse | Dark neon | `promo/versions-en-v4/pzhisen-promo-en4-v2-vertical.mp4` |
-| V3 | Vincent | Luxury marble lobby | Cream gold enterprise | `promo/versions-en-v4/pzhisen-promo-en4-v3-vertical.mp4` |
-| V4 | Grant | Park terrace skyline | Coral sky playful | `promo/versions-en-v4/pzhisen-promo-en4-v4-vertical.mp4` |
-| V5 | Logan | Minimal white studio | Bauhaus mono | `promo/versions-en-v4/pzhisen-promo-en4-v5-vertical.mp4` |
+| V1 | Blake | Chicago glass boardroom | Slate ice SaaS | `promo/versions-en-v5/pzhisen-promo-en5-v1-vertical.mp4` |
+| V2 | Hunter | Palm Springs desert patio | Sand amber warm | `promo/versions-en-v5/pzhisen-promo-en5-v2-vertical.mp4` |
+| V3 | Tristan | Brooklyn brick loft | Cyan ink creative | `promo/versions-en-v5/pzhisen-promo-en5-v3-vertical.mp4` |
+| V4 | Miles | Golf clubhouse terrace | Emerald gold calm | `promo/versions-en-v5/pzhisen-promo-en5-v4-vertical.mp4` |
+| V5 | Connor | Music studio control room | Crimson black media | `promo/versions-en-v5/pzhisen-promo-en5-v5-vertical.mp4` |
 
-- Format: 1080×1920 · English burned-in subtitles · ~1:44–2:05 each
-- Players: `promo/promo-versions-en4.html`
-- Mobile download: `promo/download-videos-en4.html`
-- Phone ZIP (all 5, ~57MB): https://github.com/leedh994-a11y/Pzhisen/releases/download/en4-vertical-5pack/pzhisen-promo-en4-5videos-vertical.zip
+- Format: 1080×1920 · English burned-in subtitles · ~1:50–2:15 each
+- Players: `promo/promo-versions-en5.html`
+- Mobile download: `promo/download-videos-en5.html`
+- ZIP (all 5): `promo/versions-en-v5/pzhisen-promo-en5-5videos-vertical.zip`
 
 Rebuild:
 
 ```bash
 cd promo
-python3 scripts/make_narration_versions_en_v4.py
-python3 scripts/build_versions_vertical_en_v4.py all
+python3 scripts/make_narration_versions_en_v5.py
+python3 scripts/build_versions_vertical_en_v5.py all
 ```
+
+## Previous English 5-pack v4 (kept for reference)
+
+Derek / Cole / Vincent / Grant / Logan — `promo/versions-en-v4/`  
+Page: `promo/promo-versions-en4.html`
 
 ## Previous English 5-pack v3 (kept for reference)
 
