@@ -47,3 +47,10 @@ promo/assets/versions-en-v8/**/duration.txt
 promo/assets/versions-en-v8/**/script.txt
 promo/versions-en-v8/*-silent.mp4
 promo/assets/versions-en-v8/**/*.ass
+
+# v9 intermediate TTS / silent renders (keep PNGs + final MP4s)
+promo/assets/versions-en-v9/**/narration.*
+promo/assets/versions-en-v9/**/duration.txt
+promo/assets/versions-en-v9/**/script.txt
+promo/versions-en-v9/*-silent.mp4
+promo/assets/versions-en-v9/**/*.ass

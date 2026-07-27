@@ -12,30 +12,35 @@ Edited vertical cut from the shared WeChat/Tencent source clip:
 - Rebuild ZH names: `python3 promo/scripts/edit_polsia_to_pzhisen_bob.py --src <source.mp4> --out promo/versions-zh-edit/pzhisen-bob-from-polsia-vertical.mp4`
 - Rebuild EN narration: `python3 promo/scripts/make_polsia_edit_english.py --src <zh-edited.mp4> --out promo/versions-zh-edit/pzhisen-bob-english-vertical.mp4`
 
-## NEW English 5-pack v8 (unique — not prior versions)
+## NEW English 5-pack v9 (unique — not prior versions)
 
-Brand-new vertical cuts with **different presenters, scripts, voices, pacing, and per-video website UI screenshots** from every previous pack (v1–v7).
+Brand-new vertical cuts with **different presenters, scripts, voices, pacing, and per-video website UI screenshots** from every previous pack (v1–v8).
 
 | Version | Presenter | Look | UI style | File |
 |---|---|---|---|---|
-| V1 | Mason | Boston harbor office | Slate-navy ice | `promo/versions-en-v8/pzhisen-promo-en8-v1-vertical.mp4` |
-| V2 | Parker | Denver mountain loft | Copper-sage | `promo/versions-en-v8/pzhisen-promo-en8-v2-vertical.mp4` |
-| V3 | Bennett | Miami ocean condo | Aqua-coral lifestyle | `promo/versions-en-v8/pzhisen-promo-en8-v3-vertical.mp4` |
-| V4 | Quinn | Seattle tech loft | Graphite-lime | `promo/versions-en-v8/pzhisen-promo-en8-v4-vertical.mp4` |
-| V5 | Donovan | Dallas boardroom | Cognac-bronze executive | `promo/versions-en-v8/pzhisen-promo-en8-v5-vertical.mp4` |
+| V1 | Fletcher | Chicago river loft | Indigo-amber | `promo/versions-en-v9/pzhisen-promo-en9-v1-vertical.mp4` |
+| V2 | Camden | Austin creative studio | Cactus-terracotta | `promo/versions-en-v9/pzhisen-promo-en9-v2-vertical.mp4` |
+| V3 | Sterling | NYC Midtown penthouse | Platinum-crimson | `promo/versions-en-v9/pzhisen-promo-en9-v3-vertical.mp4` |
+| V4 | Beckett | Portland glass atrium | Forest-mint | `promo/versions-en-v9/pzhisen-promo-en9-v4-vertical.mp4` |
+| V5 | Harlan | Phoenix desert modern | Sand-turquoise | `promo/versions-en-v9/pzhisen-promo-en9-v5-vertical.mp4` |
 
 - Format: 1080×1920 · English burned-in subtitles · ~1:45–2:20 each
-- Players: `promo/promo-versions-en8.html`
-- Mobile download page: `promo/download-videos-en8.html`
-- Phone ZIP (all 5, ~85MB): https://github.com/leedh994-a11y/Pzhisen/raw/main/promo/versions-en-v8/pzhisen-promo-en8-5videos-vertical.zip
+- Players: `promo/promo-versions-en9.html`
+- Mobile download page: `promo/download-videos-en9.html`
+- Phone ZIP (all 5, ~83MB): https://github.com/leedh994-a11y/Pzhisen/raw/main/promo/versions-en-v9/pzhisen-promo-en9-5videos-vertical.zip
 
 Rebuild:
 
 ```bash
 cd promo
-python3 scripts/make_narration_versions_en_v8.py
-python3 scripts/build_versions_vertical_en_v8.py all
+python3 scripts/make_narration_versions_en_v9.py
+python3 scripts/build_versions_vertical_en_v9.py all
 ```
+
+## Previous English 5-pack v8 (kept for reference)
+
+Mason / Parker / Bennett / Quinn / Donovan — `promo/versions-en-v8/`  
+Page: `promo/promo-versions-en8.html`
 
 ## Previous English 5-pack v7 (kept for reference)
 
