@@ -12,30 +12,41 @@ Edited vertical cut from the shared WeChat/Tencent source clip:
 - Rebuild ZH names: `python3 promo/scripts/edit_polsia_to_pzhisen_bob.py --src <source.mp4> --out promo/versions-zh-edit/pzhisen-bob-from-polsia-vertical.mp4`
 - Rebuild EN narration: `python3 promo/scripts/make_polsia_edit_english.py --src <zh-edited.mp4> --out promo/versions-zh-edit/pzhisen-bob-english-vertical.mp4`
 
-## NEW English 5-pack v8 (unique — not prior versions)
+## NEW English 5-pack v10 — Results + Urgency (3-act)
 
-Brand-new vertical cuts with **different presenters, scripts, voices, pacing, and per-video website UI screenshots** from every previous pack (v1–v7).
+Brand-new vertical cuts built for Facebook/Reels duplicate avoidance. Same core claims, **different scripts, voices, locales, pacing, color systems, and per-video pzhisen.online UI shots** vs every prior pack (v1–v8).
 
-| Version | Presenter | Look | UI style | File |
+**Structure (all 5):**
+1. **Act 1 — money result:** backend earnings / first AI-store order ($47 or $87)
+2. **Act 2 — minimal ops:** product name + 3 photos + payments; no code / no copy; AI ads + support at 3AM or 4AM
+3. **Act 3 — urgency:** remaining seats **10/50** or **12/50**; free test CTA; next month if full
+
+| Version | Voice | Look | Amount / quota | File |
 |---|---|---|---|---|
-| V1 | Mason | Boston harbor office | Slate-navy ice | `promo/versions-en-v8/pzhisen-promo-en8-v1-vertical.mp4` |
-| V2 | Parker | Denver mountain loft | Copper-sage | `promo/versions-en-v8/pzhisen-promo-en8-v2-vertical.mp4` |
-| V3 | Bennett | Miami ocean condo | Aqua-coral lifestyle | `promo/versions-en-v8/pzhisen-promo-en8-v3-vertical.mp4` |
-| V4 | Quinn | Seattle tech loft | Graphite-lime | `promo/versions-en-v8/pzhisen-promo-en8-v4-vertical.mp4` |
-| V5 | Donovan | Dallas boardroom | Cognac-bronze executive | `promo/versions-en-v8/pzhisen-promo-en8-v5-vertical.mp4` |
+| V1 | Knox · en-GB-Ryan | Midnight Ledger (emerald) | $47 · 10/50 | `promo/versions-en-v10/pzhisen-promo-en10-v1-vertical.mp4` |
+| V2 | Weston · en-AU-William | Warm Storefront (orange) | $87 · 12/50 | `promo/versions-en-v10/pzhisen-promo-en10-v2-vertical.mp4` |
+| V3 | Callum · en-CA-Liam | Ice Glass Console | $47 · 10/50 | `promo/versions-en-v10/pzhisen-promo-en10-v3-vertical.mp4` |
+| V4 | Dorian · en-GB-Thomas | Graphite Signal (lime) | $87 · 12/50 | `promo/versions-en-v10/pzhisen-promo-en10-v4-vertical.mp4` |
+| V5 | Everett · en-US-Roger | Editorial Alert (crimson) | $47 · 10/50 | `promo/versions-en-v10/pzhisen-promo-en10-v5-vertical.mp4` |
 
-- Format: 1080×1920 · English burned-in subtitles · ~1:45–2:20 each
-- Players: `promo/promo-versions-en8.html`
-- Mobile download page: `promo/download-videos-en8.html`
-- Phone ZIP (all 5, ~85MB): https://github.com/leedh994-a11y/Pzhisen/raw/main/promo/versions-en-v8/pzhisen-promo-en8-5videos-vertical.zip
+- Format: 1080×1920 · English burned-in subtitles · ~46–55s each
+- Players: `promo/promo-versions-en10.html`
+- Mobile download page: `promo/download-videos-en10.html`
+- Phone ZIP (all 5, ~73MB): https://github.com/leedh994-a11y/Pzhisen/raw/main/promo/versions-en-v10/pzhisen-promo-en10-5videos-vertical.zip
 
 Rebuild:
 
 ```bash
 cd promo
-python3 scripts/make_narration_versions_en_v8.py
-python3 scripts/build_versions_vertical_en_v8.py all
+python3 scripts/generate_assets_results_urgency_v10.py   # optional refresh of procedural frames
+python3 scripts/make_narration_versions_en_v10.py
+python3 scripts/build_versions_vertical_en_v10.py all
 ```
+
+## Previous English 5-pack v8 (kept for reference)
+
+Mason / Parker / Bennett / Quinn / Donovan — `promo/versions-en-v8/`  
+Page: `promo/promo-versions-en8.html`
 
 ## Previous English 5-pack v7 (kept for reference)
 
