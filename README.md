@@ -12,7 +12,42 @@ Edited vertical cut from the shared WeChat/Tencent source clip:
 - Rebuild ZH names: `python3 promo/scripts/edit_polsia_to_pzhisen_bob.py --src <source.mp4> --out promo/versions-zh-edit/pzhisen-bob-from-polsia-vertical.mp4`
 - Rebuild EN narration: `python3 promo/scripts/make_polsia_edit_english.py --src <zh-edited.mp4> --out promo/versions-zh-edit/pzhisen-bob-english-vertical.mp4`
 
-## NEW English 5-pack v10 — Results + Urgency (3-act)
+## NEW English 25-pack v11 — Orders 2–6 sequels (V1–V5 × 5)
+
+Continues yesterday’s v10 personas. For **each** of V1–V5, five new vertical cuts:
+
+| Sequel | Story beat |
+|---|---|
+| o2 | Today AM/PM — AI store closes the **2nd** order |
+| o3 | An hour later — **3rd** order |
+| o4 | Another hour later — **4th** order |
+| o5 | One more hour later — **5th** order |
+| o6 | Yet another hour later — **6th** order |
+
+Same 3-act structure (money → zero-code ops → seat scarcity). Unique scripts, voice micro-shifts, color grades, motion, and pzhisen.online frames vs v10 and vs each sibling.
+
+| Line | Persona | Quota | Files |
+|---|---|---|---|
+| V1 | Knox | 10/50 | `promo/versions-en-v11/pzhisen-promo-en11-v1o{2–6}-vertical.mp4` |
+| V2 | Weston | 12/50 | `…-v2o{2–6}-vertical.mp4` |
+| V3 | Callum | 10/50 | `…-v3o{2–6}-vertical.mp4` |
+| V4 | Dorian | 12/50 | `…-v4o{2–6}-vertical.mp4` |
+| V5 | Everett | 10/50 | `…-v5o{2–6}-vertical.mp4` |
+
+- Players: `promo/promo-versions-en11.html`
+- Mobile download (25 links + 5 ZIPs): `promo/download-videos-en11.html`
+- Per-line ZIP (~24–28MB each): `promo/versions-en-v11/pzhisen-promo-en11-vN-orders2to6-vertical.zip`
+
+Rebuild:
+
+```bash
+cd promo
+python3 scripts/generate_assets_orders_v11.py
+python3 scripts/make_narration_versions_en_v11.py
+python3 scripts/build_versions_vertical_en_v11.py all j2
+```
+
+## Previous English 5-pack v10 — Results + Urgency (3-act · first order)
 
 Brand-new vertical cuts built for Facebook/Reels duplicate avoidance. Same core claims, **different scripts, voices, locales, pacing, color systems, and per-video pzhisen.online UI shots** vs every prior pack (v1–v8).
 
