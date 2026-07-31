@@ -28,7 +28,9 @@
     "server": "node ./scripts/server.mjs"
   },
   "dependencies": {
+    "@langchain/core": "^1.2.4",
     "dotenv": "^16.4.7",
+    "langchain": "^1.5.4",
     "x-multi": "^1.0.0"
   },
   "engines": {
