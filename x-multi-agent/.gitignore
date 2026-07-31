@@ -1,0 +1,7 @@
+node_modules/
+.env
+browser-profiles/**
+!browser-profiles/.gitkeep
+!browser-profiles/**/.gitkeep
+*.log
+.DS_Store

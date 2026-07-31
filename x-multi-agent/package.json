@@ -1,0 +1,37 @@
+{
+  "name": "pzhisen-x-multi-agent",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Pzhisen Twitter/X AI Agent powered by x-multi (Gemini + browser automation)",
+  "type": "module",
+  "scripts": {
+    "tweet": "node ./scripts/tweet.mjs",
+    "login": "xm-login --profile pzhisen",
+    "post": "xm-post",
+    "profile": "xm-profile",
+    "profile:list": "xm-profile list",
+    "profile:create": "xm-profile create",
+    "profile:update": "xm-profile update",
+    "profile:delete": "xm-profile delete",
+    "persona": "xm-persona",
+    "persona:list": "xm-persona list",
+    "persona:show": "xm-persona show",
+    "persona:link": "xm-persona link",
+    "queue:status": "xm-queue status",
+    "queue:list": "xm-queue list",
+    "queue:add": "xm-queue add",
+    "queue:generate": "xm-queue generate",
+    "schedule:start": "xm-schedule start",
+    "schedule:stop": "xm-schedule stop",
+    "schedule:status": "xm-schedule status",
+    "setup": "node ./scripts/setup.mjs",
+    "server": "node ./scripts/server.mjs"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "x-multi": "^1.0.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

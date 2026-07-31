@@ -117,3 +117,19 @@ Page: `promo/promo-versions-en2.html`
 
 Michael / David / James / Carlos / William — `promo/versions/`  
 Page: `promo/promo-versions-en.html`
+
+## Twitter / X AI Agent (`x-multi`)
+
+Real tweet-posting agent under `x-multi-agent/` (Google Gemini + browser automation via npm `x-multi`).
+
+```bash
+cd x-multi-agent
+npm install
+cp .env.example .env   # set GEMINI_API_KEY
+npm run setup
+npm run login          # first time: manual Twitter login in browser
+npm run tweet "your topic"
+```
+
+See `x-multi-agent/README.md` for full setup, HTTP API (`npm run server`), and troubleshooting.
+

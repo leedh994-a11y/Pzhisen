@@ -1,0 +1,14 @@
+{
+  "profiles": {
+    "pzhisen": {
+      "platform": "twitter",
+      "id": "pzhisen",
+      "handle": "@pzhisen",
+      "description": "Pzhisen official AI store marketing account",
+      "profileDir": "browser-profiles/twitter-pzhisen",
+      "createdAt": "2026-07-31T00:00:00.000Z",
+      "language": "en"
+    }
+  },
+  "defaultProfile": "pzhisen"
+}
