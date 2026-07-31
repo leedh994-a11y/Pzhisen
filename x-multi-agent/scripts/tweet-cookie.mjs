@@ -68,9 +68,10 @@ Return ONLY the tweet text.`,
 function buildCookies() {
   const auth = requireEnv("TWITTER_AUTH_TOKEN");
   const ct0 = requireEnv("TWITTER_CT0");
+  // agent-twitter-client sets cookies against https://twitter.com — Domain must match
   return [
-    `auth_token=${auth}; Domain=.x.com; Path=/; Secure; HttpOnly`,
-    `ct0=${ct0}; Domain=.x.com; Path=/; Secure`,
+    `auth_token=${auth}; Domain=.twitter.com; Path=/; Secure; HttpOnly; SameSite=None`,
+    `ct0=${ct0}; Domain=.twitter.com; Path=/; Secure; SameSite=Lax`,
   ];
 }
 

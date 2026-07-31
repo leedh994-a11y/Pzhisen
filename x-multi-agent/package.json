@@ -33,8 +33,10 @@
     "@langchain/core": "^1.2.4",
     "agent-twitter-client": "^0.0.18",
     "ai": "^6.0.238",
+    "chrome-remote-interface": "^0.34.0",
     "dotenv": "^16.4.7",
     "langchain": "^1.5.4",
+    "puppeteer-core": "^24.43.1",
     "x-multi": "^1.0.0"
   },
   "engines": {
