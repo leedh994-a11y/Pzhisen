@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "tweet": "node ./scripts/tweet.mjs",
+    "tweet:cookie": "node ./scripts/tweet-cookie.mjs",
     "login": "xm-login --profile pzhisen",
     "post": "xm-post",
     "profile": "xm-profile",
@@ -28,7 +29,10 @@
     "server": "node ./scripts/server.mjs"
   },
   "dependencies": {
+    "@ai-sdk/google": "^4.0.29",
     "@langchain/core": "^1.2.4",
+    "agent-twitter-client": "^0.0.18",
+    "ai": "^6.0.238",
     "dotenv": "^16.4.7",
     "langchain": "^1.5.4",
     "x-multi": "^1.0.0"

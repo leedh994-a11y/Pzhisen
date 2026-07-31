@@ -1,10 +1,60 @@
 # Pzhisen x-multi Twitter AI Agent
 
-真正能发推的 AI Agent（基于 npm 包 [`x-multi`](https://www.npmjs.com/package/x-multi)）：
+真正能发推的 AI Agent：
 
 - Google Gemini 按话题生成推文
-- 浏览器自动化打开 X/Twitter、填写内容、点击发布
-- 首次手动登录，会话保存后可重复发推
+- **推荐：Cookie 发推**（不需要远程桌面 / `npm run login`）
+- 备选：x-multi 浏览器自动化发推
+
+## 推荐方案：Cookie 发推（最简单）
+
+不需要 Cursor「控制桌面」，也不依赖 `npm run login`。
+
+### 1) 从浏览器导出 Cookie（电脑 Chrome）
+
+1. 用 Chrome 打开 https://x.com 并确保**已登录**
+2. 按 `F12` 打开开发者工具
+3. 打开 **Application（应用程序）** → **Cookies** → `https://x.com`
+4. 找到并复制这两个值：
+   - `auth_token`
+   - `ct0`
+
+### 2) 写入 `.env`
+
+```bash
+cd x-multi-agent
+cp .env.example .env
+```
+
+填入：
+
+```bash
+GEMINI_API_KEY=你的Gemini密钥
+TWITTER_AUTH_TOKEN=粘贴auth_token
+TWITTER_CT0=粘贴ct0
+TWEET_MODE=cookie
+```
+
+### 3) 发推
+
+```bash
+npm install
+npm run tweet:cookie "Pzhisen AI store overnight first sale"
+```
+
+或启动 HTTP API：
+
+```bash
+npm run server
+curl -X POST http://127.0.0.1:8787/api/tweet \
+  -H "Authorization: Bearer change-me-to-a-long-random-secret" \
+  -H "Content-Type: application/json" \
+  -d '{"topic":"Pzhisen AI store overnight first sale"}'
+```
+
+---
+
+## 备选方案：浏览器登录（x-multi）
 
 ## 前置条件
 

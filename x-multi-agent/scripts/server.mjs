@@ -34,13 +34,28 @@ function readBody(req) {
   });
 }
 
+function hasCookies() {
+  const a = (process.env.TWITTER_AUTH_TOKEN || "").trim();
+  const c = (process.env.TWITTER_CT0 || "").trim();
+  return Boolean(a && c);
+}
+
 function runTweet(topic) {
+  const mode = (process.env.TWEET_MODE || "").toLowerCase();
+  const useCookie = mode === "cookie" || (mode !== "browser" && hasCookies());
+
+  const cmd = useCookie
+    ? ["node", "./scripts/tweet-cookie.mjs", topic]
+    : ["npx", "xm-post", topic, "--profile", process.env.DEFAULT_PROFILE || "pzhisen"];
+
+  console.log(`[api] mode=${useCookie ? "cookie" : "browser"}`);
+
   return new Promise((resolve) => {
-    const child = spawn(
-      "npx",
-      ["xm-post", topic, "--profile", process.env.DEFAULT_PROFILE || "pzhisen"],
-      { cwd: root, env: process.env, shell: true }
-    );
+    const child = spawn(cmd[0], cmd.slice(1), {
+      cwd: root,
+      env: process.env,
+      shell: true,
+    });
     let out = "";
     let err = "";
     child.stdout.on("data", (d) => (out += d.toString()));
