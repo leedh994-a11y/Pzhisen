@@ -146,6 +146,16 @@ async function main() {
     protocolTimeout: 180000,
   });
   try {
+    // Close leftover tabs so CDP stays responsive
+    const existing = await browser.pages();
+    for (const p of existing.slice(1)) {
+      try {
+        await p.close();
+      } catch {
+        // ignore
+      }
+    }
+
     const page = await browser.newPage();
     page.setDefaultNavigationTimeout(120000);
     page.setDefaultTimeout(120000);
@@ -170,84 +180,100 @@ async function main() {
       ...cookieBase.map((c) => ({ ...c, domain: ".twitter.com" }))
     );
 
-    await page.goto("https://x.com/compose/post", {
-      waitUntil: "domcontentloaded",
-      timeout: 120000,
-    });
-    await sleep(5000);
-
-    const sel = '[data-testid="tweetTextarea_0"], div[role="textbox"]';
-    await page.waitForSelector(sel, { timeout: 25000 });
-    await page.click(sel);
-    await page.keyboard.down("Control");
-    await page.keyboard.press("KeyA");
-    await page.keyboard.up("Control");
-    await page.keyboard.press("Backspace");
-    await page.type(sel, tweet, { delay: 12 });
-    await sleep(1200);
-
-    const btn =
-      (await page.$('[data-testid="tweetButton"]')) ||
-      (await page.$('[data-testid="tweetButtonInline"]'));
-    if (!btn) throw new Error("Post button not found");
-
-    // Must see CreateTweet GraphQL success — navigating away alone is NOT enough.
     /** @type {{ status: number, id: string|null, error: string|null }[]} */
     const creates = [];
-    const onResponse = async (res) => {
+    page.on("response", async (res) => {
       try {
         const url = res.url();
-        if (!/CreateTweet/i.test(url)) return;
+        if (!/\/CreateTweet/i.test(url)) return;
         const body = await res.text();
         let id = null;
         let error = null;
         try {
           const json = JSON.parse(body);
-          id =
-            json?.data?.create_tweet?.tweet_results?.result?.rest_id ||
-            json?.data?.create_tweet?.tweet_results?.result?.tweet?.rest_id ||
-            null;
-          // nested legacy shape
+          const result = json?.data?.create_tweet?.tweet_results?.result;
+          id = result?.rest_id || result?.tweet?.rest_id || null;
           if (!id) {
-            const m = body.match(/"rest_id":"(\d{10,})"/);
-            if (m) id = m[1];
+            // Prefer status-like rest_ids near create_tweet payload
+            const ids = [...body.matchAll(/"rest_id":"(\d{15,})"/g)].map(
+              (m) => m[1]
+            );
+            // Filter out known user id prefix if present
+            id = ids.find((x) => !x.startsWith("2064722622160756736")) || ids[0] || null;
           }
-          const errMsg =
+          error =
             json?.errors?.[0]?.message ||
-            json?.data?.create_tweet?.tweet_results?.result?.reason ||
-            null;
-          if (errMsg) error = String(errMsg);
-          if (/duplicate|already|forbidden|deny|limit/i.test(body) && !id) {
-            error = error || body.slice(0, 300);
+            (typeof result?.reason === "string" ? result.reason : null);
+          if (/duplicate|already posted|Status is a duplicate/i.test(body) && !id) {
+            error = error || "Status is a duplicate";
           }
         } catch {
-          const m = body.match(/"rest_id":"(\d{10,})"/);
+          const m = body.match(/"rest_id":"(\d{15,})"/);
           if (m) id = m[1];
         }
-        creates.push({ status: res.status(), id, error });
+        creates.push({ status: res.status(), id, error: error ? String(error) : null });
       } catch {
-        // ignore parse races
+        // ignore
       }
-    };
-    page.on("response", onResponse);
+    });
 
-    const disabled = await page.evaluate(
-      (el) => el.getAttribute("aria-disabled"),
-      btn
-    );
-    if (disabled === "true") {
+    await page.goto("https://x.com/compose/post", {
+      waitUntil: "domcontentloaded",
+      timeout: 120000,
+    });
+    await sleep(4000);
+
+    const sel = '[data-testid="tweetTextarea_0"], div[role="textbox"]';
+    await page.waitForSelector(sel, { timeout: 30000 });
+    await page.click(sel);
+    await page.keyboard.down("Control");
+    await page.keyboard.press("KeyA");
+    await page.keyboard.up("Control");
+    await page.keyboard.press("Backspace");
+    // insertText is more reliable than type() for multilanguage
+    try {
+      await page.keyboard.insertText(tweet);
+    } catch {
+      await page.type(sel, tweet, { delay: 10 });
+    }
+    await sleep(2000);
+
+    // Wait until Post is enabled
+    for (let i = 0; i < 20; i++) {
+      const ready = await page.evaluate(() => {
+        const b =
+          document.querySelector('[data-testid="tweetButton"]') ||
+          document.querySelector('[data-testid="tweetButtonInline"]');
+        if (!b) return false;
+        return b.getAttribute("aria-disabled") !== "true";
+      });
+      if (ready) break;
+      await sleep(250);
+    }
+
+    const clicked = await page.evaluate(() => {
+      const b =
+        document.querySelector('[data-testid="tweetButton"]') ||
+        document.querySelector('[data-testid="tweetButtonInline"]');
+      if (!b) return "missing";
+      b.click();
+      return "clicked";
+    });
+    if (clicked !== "clicked") throw new Error("Post button not found");
+
+    // Fallback shortcut if GraphQL hasn't fired
+    for (let i = 0; i < 10 && creates.length === 0; i++) {
+      await sleep(500);
+    }
+    if (creates.length === 0) {
       await page.keyboard.down("Control");
       await page.keyboard.press("Enter");
       await page.keyboard.up("Control");
-    } else {
-      await btn.click();
     }
 
-    // Wait up to ~20s for CreateTweet
     for (let i = 0; i < 40 && creates.length === 0; i++) {
       await sleep(500);
     }
-    page.off("response", onResponse);
 
     const hit = creates.find((c) => c.id) || creates[0];
     if (!hit?.id) {
@@ -255,7 +281,9 @@ async function main() {
         ? `status=${hit.status} error=${hit.error || "no rest_id"}`
         : "no CreateTweet response (button click did not publish)";
       console.error("❌ Publish not confirmed:", detail);
-      console.error("   Tip: X rejects duplicate text; change the wording and retry.");
+      console.error(
+        "   Tip: change the wording (X rejects duplicates) and retry; confirm you are viewing @Pzhise."
+      );
       process.exit(1);
     }
 
