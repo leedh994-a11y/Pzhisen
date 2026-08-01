@@ -1,18 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 
 /**
- * Secure server-side SERP proxy for V0 / Next.js.
+ * Compatibility route: /api/serp → tok.mom OpenAI chat/completions.
  *
- * Env (Vercel / v0 project → Environment Variables):
- *   SERP_API_KEY=your_provider_token
- *   SERP_API_URL=https://api.your-serp-provider.com/v1/search
- *   SERP_API_METHOD=POST          (optional, default POST)
- *   SERP_API_AUTH_HEADER=Authorization  (optional)
- *   SERP_API_AUTH_PREFIX=Bearer         (optional, use "" for raw token)
+ * Your provider (tok.mom) is an LLM gateway, not a SERP API.
+ * This route maps keyword/q into the exact OpenAI request format.
  *
- * Frontend NEVER sees SERP_API_KEY — only calls this route:
- *   GET  /api/serp?keyword=ai+store
- *   POST /api/serp  { "keyword": "ai store", "gl": "us", "hl": "en" }
+ * Env (Vercel / V0):
+ *   OPENAI_API_KEY=sk-...
+ *   OPENAI_API_BASE=https://api.tok.mom/v1
+ *   OPENAI_MODEL=gpt-4o-mini   (optional)
+ *
+ * Prefer /api/chat for full OpenAI pass-through.
  */
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -20,109 +19,94 @@ export const dynamic = "force-dynamic";
 type SerpBody = {
   keyword?: string;
   q?: string;
-  gl?: string;
-  hl?: string;
-  engine?: string;
-  num?: number;
+  prompt?: string;
+  model?: string;
+  messages?: Array<{ role: string; content: string }>;
   [key: string]: unknown;
 };
 
-function getToken() {
-  return (process.env.SERP_API_KEY || process.env.SERPAPI_API_KEY || "").trim();
-}
-
-function getUpstreamUrl() {
+function getApiKey() {
   return (
-    process.env.SERP_API_URL ||
-    process.env.SERPAPI_API_URL ||
-    "https://api.your-serp-provider.com/v1/search"
+    process.env.OPENAI_API_KEY ||
+    process.env.LLM_API_KEY ||
+    process.env.TOK_API_KEY ||
+    process.env.SERP_API_KEY ||
+    ""
   ).trim();
 }
 
-function buildAuthHeader(token: string): Record<string, string> {
-  const headerName = (process.env.SERP_API_AUTH_HEADER || "Authorization").trim();
-  const prefix = process.env.SERP_API_AUTH_PREFIX;
-  // default Bearer; set SERP_API_AUTH_PREFIX= to send raw token
-  const value =
-    prefix === undefined || prefix === null
-      ? `Bearer ${token}`
-      : prefix === ""
-        ? token
-        : `${prefix} ${token}`.trim();
-  return { [headerName]: value };
+function getApiBase() {
+  let base = (
+    process.env.OPENAI_API_BASE ||
+    process.env.LLM_API_URL ||
+    process.env.OPENAI_BASE_URL ||
+    process.env.SERP_API_URL ||
+    "https://api.tok.mom/v1"
+  ).trim();
+
+  base = base.replace(/\/+$/, "");
+  base = base.replace(/\/chat\/completions$/i, "");
+  if (!/\/v\d+$/i.test(base) && !base.endsWith("/v1")) {
+    base = `${base}/v1`;
+  }
+  return base;
 }
 
-async function callSerp(params: {
+function getDefaultModel() {
+  return (process.env.OPENAI_MODEL || process.env.LLM_MODEL || "gpt-4o-mini").trim();
+}
+
+async function callChatCompletions(input: {
   keyword: string;
-  gl?: string;
-  hl?: string;
-  engine?: string;
-  num?: number;
+  model?: string;
+  messages?: Array<{ role: string; content: string }>;
   extra?: Record<string, unknown>;
 }) {
-  const token = getToken();
-  const upstream = getUpstreamUrl();
-  const method = (process.env.SERP_API_METHOD || "POST").toUpperCase();
-
-  if (!token) {
-    return NextResponse.json(
-      { ok: false, error: "SERP_API_KEY not configured" },
-      { status: 500 }
-    );
-  }
-
-  if (!upstream || upstream.includes("your-serp-provider.com")) {
+  const apiKey = getApiKey();
+  if (!apiKey) {
     return NextResponse.json(
       {
         ok: false,
         error:
-          "SERP_API_URL not configured. Set it to your provider endpoint in Vercel env.",
+          "OPENAI_API_KEY not configured. Set tok.mom sk- token in Vercel/V0 env.",
       },
       { status: 500 }
     );
   }
 
-  const payload = {
-    q: params.keyword,
-    keyword: params.keyword,
-    ...(params.gl ? { gl: params.gl } : {}),
-    ...(params.hl ? { hl: params.hl } : {}),
-    ...(params.engine ? { engine: params.engine } : {}),
-    ...(params.num ? { num: params.num } : {}),
-    ...(params.extra || {}),
+  const upstream = `${getApiBase()}/chat/completions`;
+  const model = (input.model || getDefaultModel()).trim();
+  const messages =
+    input.messages && input.messages.length > 0
+      ? input.messages
+      : [{ role: "user", content: input.keyword }];
+
+  // Exact tok.mom / OpenAI chat.completions payload
+  const payload: Record<string, unknown> = {
+    model,
+    messages,
+    stream: false,
+    ...(input.extra || {}),
   };
+  // Do not let leftover SERP fields override OpenAI shape
+  delete payload.keyword;
+  delete payload.q;
+  delete payload.gl;
+  delete payload.hl;
+  delete payload.engine;
+  delete payload.num;
+  delete payload.prompt;
 
-  let response: Response;
-
-  if (method === "GET") {
-    const url = new URL(upstream);
-    for (const [k, v] of Object.entries(payload)) {
-      if (v !== undefined && v !== null) url.searchParams.set(k, String(v));
-    }
-    // Some providers use ?api_key=
-    if (process.env.SERP_API_KEY_QUERY === "true") {
-      url.searchParams.set("api_key", token);
-    }
-    response = await fetch(url.toString(), {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        ...buildAuthHeader(token),
-      },
-      cache: "no-store",
-    });
-  } else {
-    response = await fetch(upstream, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        ...buildAuthHeader(token),
-      },
-      body: JSON.stringify(payload),
-      cache: "no-store",
-    });
-  }
+  const response = await fetch(upstream, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify(payload),
+    cache: "no-store",
+  });
 
   const text = await response.text();
   let data: unknown = null;
@@ -136,46 +120,56 @@ async function callSerp(params: {
     return NextResponse.json(
       {
         ok: false,
-        error: `Upstream SERP failed with status ${response.status}`,
+        error: `tok.mom chat/completions failed (${response.status})`,
         status: response.status,
+        upstream,
         data,
       },
       { status: 502 }
     );
   }
 
+  const content =
+    data &&
+    typeof data === "object" &&
+    Array.isArray((data as { choices?: unknown }).choices)
+      ? (data as { choices: Array<{ message?: { content?: string } }> }).choices[0]
+          ?.message?.content
+      : undefined;
+
   return NextResponse.json({
     ok: true,
-    keyword: params.keyword,
+    keyword: input.keyword,
+    model,
+    upstream,
+    content: content ?? null,
     data,
   });
 }
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
-  const keyword = (searchParams.get("keyword") || searchParams.get("q") || "").trim();
+  const keyword = (
+    searchParams.get("keyword") ||
+    searchParams.get("q") ||
+    searchParams.get("prompt") ||
+    ""
+  ).trim();
+  const model = (searchParams.get("model") || "").trim() || undefined;
 
   if (!keyword) {
     return NextResponse.json(
-      { ok: false, error: "keyword parameter is required" },
+      { ok: false, error: "keyword (or q / prompt) parameter is required" },
       { status: 400 }
     );
   }
 
   try {
-    return await callSerp({
-      keyword,
-      gl: searchParams.get("gl") || undefined,
-      hl: searchParams.get("hl") || undefined,
-      engine: searchParams.get("engine") || undefined,
-      num: searchParams.get("num")
-        ? Number(searchParams.get("num"))
-        : undefined,
-    });
+    return await callChatCompletions({ keyword, model });
   } catch (error) {
-    console.error("Error fetching SERP data:", error);
+    console.error("Error calling tok.mom via /api/serp:", error);
     return NextResponse.json(
-      { ok: false, error: "Failed to fetch SERP data" },
+      { ok: false, error: "Failed to call tok.mom" },
       { status: 500 }
     );
   }
@@ -192,37 +186,48 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const keyword = String(body.keyword || body.q || "").trim();
-  if (!keyword) {
+  const {
+    keyword: bodyKeyword,
+    q,
+    prompt,
+    gl: _gl,
+    hl: _hl,
+    engine: _e,
+    num: _n,
+    model,
+    messages,
+    ...extra
+  } = body;
+
+  const keyword = String(bodyKeyword || q || prompt || "").trim();
+  const hasMessages = Array.isArray(messages) && messages.length > 0;
+
+  if (!keyword && !hasMessages) {
     return NextResponse.json(
-      { ok: false, error: 'Provide "keyword" (or "q")' },
+      {
+        ok: false,
+        error: 'Provide "keyword" / "q" / "prompt", or OpenAI "messages"',
+      },
       { status: 400 }
     );
   }
 
-  const {
-    keyword: _k,
-    q: _q,
-    gl,
-    hl,
-    engine,
-    num,
-    ...extra
-  } = body;
+  const firstUser =
+    hasMessages
+      ? String(messages!.find((m) => m.role === "user")?.content || "")
+      : "";
 
   try {
-    return await callSerp({
-      keyword,
-      gl: gl ? String(gl) : undefined,
-      hl: hl ? String(hl) : undefined,
-      engine: engine ? String(engine) : undefined,
-      num: typeof num === "number" ? num : undefined,
+    return await callChatCompletions({
+      keyword: keyword || firstUser || "chat",
+      model: model ? String(model) : undefined,
+      messages: hasMessages ? messages : undefined,
       extra,
     });
   } catch (error) {
-    console.error("Error fetching SERP data:", error);
+    console.error("Error calling tok.mom via /api/serp:", error);
     return NextResponse.json(
-      { ok: false, error: "Failed to fetch SERP data" },
+      { ok: false, error: "Failed to call tok.mom" },
       { status: 500 }
     );
   }

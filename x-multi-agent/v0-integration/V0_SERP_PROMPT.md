@@ -1,11 +1,33 @@
-Add a secure Next.js App Router API route at app/api/serp/route.ts that proxies to my third-party SERP provider.
+Add a secure Next.js App Router proxy for my LLM provider tok.mom (OpenAI-compatible).
 
-Rules:
-1. Read SERP_API_KEY and SERP_API_URL from process.env only (never expose to client).
-2. Support GET /api/serp?keyword=... and POST /api/serp with JSON { keyword, gl?, hl?, engine?, num? }.
-3. Default upstream method POST with Authorization: Bearer <SERP_API_KEY> and JSON body { q, keyword, ... }.
-4. Return JSON { ok, keyword, data } on success; clear errors if env missing or upstream fails.
-5. Add a simple client component components/SerpSearchBox.tsx that calls /api/serp only.
-6. Remind me to set Vercel env: SERP_API_KEY, SERP_API_URL, then Redeploy.
+Provider docs / token console: https://api.tok.mom/console/token
+Base URL: https://api.tok.mom/v1
+Endpoint: POST /chat/completions
 
-Do not put any API keys in client components. Frontend may only call /api/serp.
+Vercel env (already set — use these exact names):
+- OPENAI_API_KEY = sk-...
+- OPENAI_API_BASE = https://api.tok.mom/v1
+- OPENAI_MODEL = gpt-4o-mini (optional default)
+
+Implement:
+
+1) app/api/chat/route.ts
+- Server-only. Read OPENAI_API_KEY and OPENAI_API_BASE (alias LLM_API_URL).
+- Upstream URL = `${OPENAI_API_BASE.replace(/\/+$/,'')}/chat/completions`
+- POST with headers:
+  Authorization: Bearer ${OPENAI_API_KEY}
+  Content-Type: application/json
+- Body must be exact OpenAI chat.completions JSON:
+  { "model": "...", "messages": [{ "role": "user", "content": "..." }], "stream": false, ... }
+- Accept POST /api/chat with that body (or { prompt } → wrap into messages).
+- Accept GET /api/chat?prompt=...
+- Never expose the key to the client.
+- Return { ok: true, data: <provider json> } on success.
+
+2) app/api/serp/route.ts
+- Compatibility wrapper: map keyword/q/prompt → same tok.mom chat/completions call (same env vars, same request shape). Do NOT call a SERP search API.
+
+3) components/ChatBox.tsx and/or SerpSearchBox.tsx
+- Client only fetches /api/chat or /api/serp. No keys in client code.
+
+Remind me: after copying, Redeploy on Vercel so env vars apply.
