@@ -71,10 +71,11 @@ function runTweet(topic, text) {
   console.log(`[api] mode=${mode}`);
 
   return new Promise((resolve) => {
+    // Do NOT use shell:true — it splits tweet text on spaces.
     const child = spawn(cmd[0], cmd.slice(1), {
       cwd: root,
       env: process.env,
-      shell: true,
+      shell: false,
     });
     let out = "";
     let err = "";
