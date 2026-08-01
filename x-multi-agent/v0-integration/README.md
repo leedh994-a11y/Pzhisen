@@ -2,6 +2,8 @@
 
 用自然语言在 V0 页面输入 → 后端自动发到 `@Pzhise`。
 
+另：SERP 第三方搜索安全代理见 `SERP_README.md` / `app/api/serp/route.ts`。
+
 ## 架构
 
 ```
