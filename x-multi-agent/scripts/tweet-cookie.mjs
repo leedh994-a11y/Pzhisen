@@ -190,6 +190,47 @@ async function main() {
       (await page.$('[data-testid="tweetButton"]')) ||
       (await page.$('[data-testid="tweetButtonInline"]'));
     if (!btn) throw new Error("Post button not found");
+
+    // Must see CreateTweet GraphQL success — navigating away alone is NOT enough.
+    /** @type {{ status: number, id: string|null, error: string|null }[]} */
+    const creates = [];
+    const onResponse = async (res) => {
+      try {
+        const url = res.url();
+        if (!/CreateTweet/i.test(url)) return;
+        const body = await res.text();
+        let id = null;
+        let error = null;
+        try {
+          const json = JSON.parse(body);
+          id =
+            json?.data?.create_tweet?.tweet_results?.result?.rest_id ||
+            json?.data?.create_tweet?.tweet_results?.result?.tweet?.rest_id ||
+            null;
+          // nested legacy shape
+          if (!id) {
+            const m = body.match(/"rest_id":"(\d{10,})"/);
+            if (m) id = m[1];
+          }
+          const errMsg =
+            json?.errors?.[0]?.message ||
+            json?.data?.create_tweet?.tweet_results?.result?.reason ||
+            null;
+          if (errMsg) error = String(errMsg);
+          if (/duplicate|already|forbidden|deny|limit/i.test(body) && !id) {
+            error = error || body.slice(0, 300);
+          }
+        } catch {
+          const m = body.match(/"rest_id":"(\d{10,})"/);
+          if (m) id = m[1];
+        }
+        creates.push({ status: res.status(), id, error });
+      } catch {
+        // ignore parse races
+      }
+    };
+    page.on("response", onResponse);
+
     const disabled = await page.evaluate(
       (el) => el.getAttribute("aria-disabled"),
       btn
@@ -201,25 +242,28 @@ async function main() {
     } else {
       await btn.click();
     }
-    await sleep(5000);
 
-    await sleep(2500);
-    const status = await page.evaluate(() => {
-      const body = document.body?.innerText || "";
-      const toast = /your post was sent|已发送|post was sent|your post was sent/i.test(
-        body
-      );
-      const stillCompose = /compose\/post/i.test(location.href);
-      return { toast, stillCompose, href: location.href };
-    });
-    // Soft success: toast OR navigated away from composer after clicking Post.
-    const ok = status.toast || !status.stillCompose;
-    console.log(ok ? "🎉 Tweet posted successfully!" : "⚠️ Posted (verify on profile)");
-    console.log("URL:", status.href || page.url());
-    // Do not fail the HTTP agent on soft-success; user can verify on profile.
-    if (!ok) {
-      console.warn("No confirmation toast — treat as posted unless composer still open with button enabled");
+    // Wait up to ~20s for CreateTweet
+    for (let i = 0; i < 40 && creates.length === 0; i++) {
+      await sleep(500);
     }
+    page.off("response", onResponse);
+
+    const hit = creates.find((c) => c.id) || creates[0];
+    if (!hit?.id) {
+      const detail = hit
+        ? `status=${hit.status} error=${hit.error || "no rest_id"}`
+        : "no CreateTweet response (button click did not publish)";
+      console.error("❌ Publish not confirmed:", detail);
+      console.error("   Tip: X rejects duplicate text; change the wording and retry.");
+      process.exit(1);
+    }
+
+    const tweetUrl = `https://x.com/Pzhise/status/${hit.id}`;
+    console.log("🎉 Tweet posted successfully!");
+    console.log(`🔗 ${tweetUrl}`);
+    console.log(`🆔 ${hit.id}`);
+    console.log("URL:", tweetUrl);
   } finally {
     await browser.disconnect();
   }
