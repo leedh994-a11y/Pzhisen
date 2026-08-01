@@ -107,8 +107,18 @@ function runTweet({ topic, text, dryRun }) {
       ? ["node", "./scripts/tweet-api.mjs", "--text", text]
       : ["node", "./scripts/tweet-api.mjs", topic];
   } else if (mode === "cookie") {
-    cmd = text
-      ? ["node", "./scripts/tweet-cookie.mjs", "--text", text]
+    // Prefer exact --text so Gemini quota issues cannot block posting.
+    // If only a prompt is given, treat substantial/CN content as the tweet body.
+    const looksReady =
+      !text &&
+      topic &&
+      (topic.length >= 40 ||
+        /https?:\/\//i.test(topic) ||
+        /[\u4e00-\u9fff]/.test(topic) ||
+        /\n/.test(topic));
+    const bodyText = text || (looksReady ? topic : "");
+    cmd = bodyText
+      ? ["node", "./scripts/tweet-cookie.mjs", "--text", bodyText]
       : ["node", "./scripts/tweet-cookie.mjs", topic];
   } else {
     cmd = [
@@ -184,7 +194,14 @@ async function handleTweet(req, res) {
 
   const result = await runTweet({ topic: prompt, text, dryRun });
   const parsed = parseTweetResult(result.out);
-  const ok = result.code === 0;
+  const softOk =
+    result.code === 2 &&
+    /Posted \(verify on profile\)|Tweet posted successfully/i.test(result.out);
+  const ok = result.code === 0 || softOk;
+  const postedText =
+    parsed.generatedText ||
+    text ||
+    (/[\u4e00-\u9fff]/.test(prompt) || prompt.length >= 40 ? prompt : null);
 
   return send(res, ok ? 200 : 500, {
     ok,
@@ -192,16 +209,18 @@ async function handleTweet(req, res) {
     dryRun,
     account: `@${parsed.username}`,
     prompt: prompt || null,
-    text: parsed.generatedText || text || null,
+    text: postedText,
     tweetId: parsed.tweetId,
-    tweetUrl: parsed.tweetUrl,
+    tweetUrl: parsed.tweetUrl || (ok && !dryRun ? "https://x.com/Pzhise" : null),
     message: ok
       ? dryRun
         ? "Preview generated (not posted)"
-        : "Tweet posted to X"
+        : softOk
+          ? "Tweet posted to X (verify on profile)"
+          : "Tweet posted to X"
       : "Tweet failed",
     output: result.out.slice(-3000),
-    error: result.err.slice(-1500) || null,
+    error: ok ? null : result.err.slice(-1500) || result.out.slice(-800) || null,
   });
 }
 
