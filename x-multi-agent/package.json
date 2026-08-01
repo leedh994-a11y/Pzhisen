@@ -30,10 +30,10 @@
     "server": "node ./scripts/server.mjs"
   },
   "dependencies": {
-    "@ai-sdk/google": "^4.0.29",
+    "@ai-sdk/google": "^4.0.31",
     "@langchain/core": "^1.2.4",
     "agent-twitter-client": "^0.0.18",
-    "ai": "^6.0.238",
+    "ai": "^7.0.47",
     "chrome-remote-interface": "^0.34.0",
     "dotenv": "^16.4.7",
     "langchain": "^1.5.4",

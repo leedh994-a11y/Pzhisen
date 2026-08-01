@@ -32,26 +32,52 @@ function requireEnv(name) {
 
 function parseArgs(argv) {
   let text = null;
+  let dryRun = false;
   const rest = [];
   for (let i = 0; i < argv.length; i++) {
     if (argv[i] === "--text") text = argv[++i] || "";
+    else if (argv[i] === "--dry-run") dryRun = true;
     else rest.push(argv[i]);
   }
-  return { text, topic: rest.join(" ").trim() };
+  return { text, topic: rest.join(" ").trim(), dryRun };
+}
+
+function localTweetFromPrompt(topic) {
+  // Fallback when Gemini quota/API is unavailable — still usable from V0 NL input.
+  const cleaned = topic
+    .replace(/^(请|帮我|发一条|写一条|发推|tweet|post)\s*/i, "")
+    .replace(/[。！？]+$/g, "")
+    .trim();
+  let body = cleaned;
+  if (!/pzhisen\.online/i.test(body)) {
+    body = `${body} — try Pzhisen AI store: https://pzhisen.online`;
+  }
+  if (body.length > 270) body = `${body.slice(0, 267)}...`;
+  return body;
 }
 
 async function generateTweet(topic) {
-  const apiKey = requireEnv("GEMINI_API_KEY");
-  const google = createGoogleGenerativeAI({ apiKey });
-  const model = process.env.GEMINI_MODEL || "gemini-2.0-flash";
-  const { text } = await generateText({
-    model: google(model),
-    prompt: `Write ONE Twitter/X post in English about: ${topic}
+  const apiKey = (process.env.GEMINI_API_KEY || "").trim();
+  if (!apiKey || apiKey.includes("your_gemini")) {
+    console.warn("⚠️  No GEMINI_API_KEY — using local prompt→tweet fallback");
+    return localTweetFromPrompt(topic);
+  }
+
+  try {
+    const google = createGoogleGenerativeAI({ apiKey });
+    const model = process.env.GEMINI_MODEL || "gemini-2.0-flash";
+    const { text } = await generateText({
+      model: google(model),
+      prompt: `Write ONE Twitter/X post in English about: ${topic}
 Max 270 characters. No wrapping quotes. 0-2 hashtags max.
 Mention https://pzhisen.online naturally if relevant to AI ecommerce / automated stores.
 Return ONLY the tweet text.`,
-  });
-  return text.replace(/^["']|["']$/g, "").trim().slice(0, 280);
+    });
+    return text.replace(/^["']|["']$/g, "").trim().slice(0, 280);
+  } catch (e) {
+    console.warn("⚠️  Gemini failed, using local fallback:", String(e.message || e).slice(0, 120));
+    return localTweetFromPrompt(topic);
+  }
 }
 
 function client() {
@@ -64,10 +90,11 @@ function client() {
 }
 
 async function main() {
-  const { text: fixed, topic } = parseArgs(process.argv.slice(2));
+  const { text: fixed, topic, dryRun } = parseArgs(process.argv.slice(2));
   if (!fixed && !topic) {
     console.error('Usage: npm run tweet:api "topic"');
     console.error('   or: npm run tweet:api -- --text "exact tweet"');
+    console.error("   or: npm run tweet:api -- --dry-run \"topic\"");
     process.exit(1);
   }
 
@@ -82,6 +109,11 @@ async function main() {
   console.log(tweet);
   console.log("─".repeat(48));
   console.log(`📊 Length: ${tweet.length}/280\n`);
+
+  if (dryRun) {
+    console.log("🔎 dry-run: not posting");
+    return;
+  }
 
   const rw = client().readWrite;
   try {

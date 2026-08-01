@@ -6,6 +6,14 @@
 - **推荐：Cookie 发推**（不需要远程桌面 / `npm run login`）
 - 备选：x-multi 浏览器自动化发推
 
+## V0 自然语言发推对接
+
+完整方案见：`v0-integration/README.md`
+
+- 后端：`npm run server` → `POST /api/v0/tweet` `{"prompt":"自然语言..."}`
+- V0 侧文件：`v0-integration/app/api/tweet/route.ts` + `components/TweetComposer.tsx`
+- 一键提示词：`v0-integration/V0_PROMPT.md`（粘贴到 v0.app）
+
 ## 推荐方案 A：官方 X API 发推（已接入）
 
 在 `.env` 填入 Developer App 的 OAuth 1.0a 密钥：
