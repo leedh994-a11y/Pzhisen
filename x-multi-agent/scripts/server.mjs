@@ -40,15 +40,35 @@ function hasCookies() {
   return Boolean(a && c);
 }
 
-function runTweet(topic) {
+function hasOfficialApi() {
+  return ["TWITTER_API_KEY", "TWITTER_API_SECRET", "TWITTER_ACCESS_TOKEN", "TWITTER_ACCESS_SECRET"]
+    .every((k) => (process.env[k] || "").trim());
+}
+
+function resolveMode() {
   const mode = (process.env.TWEET_MODE || "").toLowerCase();
-  const useCookie = mode === "cookie" || (mode !== "browser" && hasCookies());
+  if (mode === "api" || mode === "cookie" || mode === "browser") return mode;
+  if (hasOfficialApi()) return "api";
+  if (hasCookies()) return "cookie";
+  return "browser";
+}
 
-  const cmd = useCookie
-    ? ["node", "./scripts/tweet-cookie.mjs", topic]
-    : ["npx", "xm-post", topic, "--profile", process.env.DEFAULT_PROFILE || "pzhisen"];
+function runTweet(topic, text) {
+  const mode = resolveMode();
+  let cmd;
+  if (mode === "api") {
+    cmd = text
+      ? ["node", "./scripts/tweet-api.mjs", "--text", text]
+      : ["node", "./scripts/tweet-api.mjs", topic];
+  } else if (mode === "cookie") {
+    cmd = text
+      ? ["node", "./scripts/tweet-cookie.mjs", "--text", text]
+      : ["node", "./scripts/tweet-cookie.mjs", topic];
+  } else {
+    cmd = ["npx", "xm-post", topic || text, "--profile", process.env.DEFAULT_PROFILE || "pzhisen"];
+  }
 
-  console.log(`[api] mode=${useCookie ? "cookie" : "browser"}`);
+  console.log(`[api] mode=${mode}`);
 
   return new Promise((resolve) => {
     const child = spawn(cmd[0], cmd.slice(1), {
@@ -85,19 +105,21 @@ const server = http.createServer(async (req, res) => {
     try {
       const body = await readBody(req);
       const topic = (body.topic || "").trim();
-      if (!topic) {
+      const text = (body.text || "").trim();
+      if (!topic && !text) {
         res.statusCode = 400;
-        res.end(JSON.stringify({ ok: false, error: 'missing "topic"' }));
+        res.end(JSON.stringify({ ok: false, error: 'missing "topic" or "text"' }));
         return;
       }
 
-      console.log(`[api] tweet topic: ${topic}`);
-      const result = await runTweet(topic);
+      console.log(`[api] tweet ${text ? "text" : "topic"}: ${(text || topic).slice(0, 80)}`);
+      const result = await runTweet(topic, text);
       res.statusCode = result.code === 0 ? 200 : 500;
       res.end(
         JSON.stringify({
           ok: result.code === 0,
           code: result.code,
+          mode: resolveMode(),
           output: result.out.slice(-4000),
           error: result.err.slice(-2000),
         })

@@ -6,7 +6,36 @@
 - **推荐：Cookie 发推**（不需要远程桌面 / `npm run login`）
 - 备选：x-multi 浏览器自动化发推
 
-## 推荐方案：Cookie 发推（最简单）
+## 推荐方案 A：官方 X API 发推（已接入）
+
+在 `.env` 填入 Developer App 的 OAuth 1.0a 密钥：
+
+```bash
+TWEET_MODE=api
+TWITTER_API_KEY=...
+TWITTER_API_SECRET=...
+TWITTER_ACCESS_TOKEN=...
+TWITTER_ACCESS_SECRET=...
+GEMINI_API_KEY=...   # 话题生成文案时需要
+```
+
+App 权限必须是 **Read and Write**，改权限后请重新生成 Access Token。
+
+```bash
+npm run tweet:api "Pzhisen AI store overnight first sale"
+npm run tweet:api -- --text "Exact tweet text here"
+```
+
+HTTP API（`npm run server`）在 `TWEET_MODE=api` 时走官方接口：
+
+```bash
+curl -X POST http://127.0.0.1:8787/api/tweet \
+  -H "Authorization: Bearer change-me-to-a-long-random-secret" \
+  -H "Content-Type: application/json" \
+  -d '{"topic":"Pzhisen AI store overnight first sale"}'
+```
+
+## 推荐方案 B：Cookie 发推
 
 不需要 Cursor「控制桌面」，也不依赖 `npm run login`。
 
