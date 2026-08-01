@@ -68,3 +68,8 @@ x-multi-agent/.env
 x-multi-agent/browser-profiles/**
 !x-multi-agent/browser-profiles/.gitkeep
 x-multi-agent/node_modules/
+
+# v0-integration Next app
+x-multi-agent/v0-integration/node_modules/
+x-multi-agent/v0-integration/.next/
+x-multi-agent/v0-integration/.vercel/
