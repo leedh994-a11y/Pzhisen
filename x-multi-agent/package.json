@@ -1,0 +1,47 @@
+{
+  "name": "pzhisen-x-multi-agent",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Pzhisen Twitter/X AI Agent powered by x-multi (Gemini + browser automation)",
+  "type": "module",
+  "scripts": {
+    "tweet": "node ./scripts/tweet.mjs",
+    "tweet:cookie": "node ./scripts/tweet-cookie.mjs",
+    "tweet:api": "node ./scripts/tweet-api.mjs",
+    "login": "xm-login --profile pzhisen",
+    "post": "xm-post",
+    "profile": "xm-profile",
+    "profile:list": "xm-profile list",
+    "profile:create": "xm-profile create",
+    "profile:update": "xm-profile update",
+    "profile:delete": "xm-profile delete",
+    "persona": "xm-persona",
+    "persona:list": "xm-persona list",
+    "persona:show": "xm-persona show",
+    "persona:link": "xm-persona link",
+    "queue:status": "xm-queue status",
+    "queue:list": "xm-queue list",
+    "queue:add": "xm-queue add",
+    "queue:generate": "xm-queue generate",
+    "schedule:start": "xm-schedule start",
+    "schedule:stop": "xm-schedule stop",
+    "schedule:status": "xm-schedule status",
+    "setup": "node ./scripts/setup.mjs",
+    "server": "node ./scripts/server.mjs"
+  },
+  "dependencies": {
+    "@ai-sdk/google": "^4.0.31",
+    "@langchain/core": "^1.2.4",
+    "agent-twitter-client": "^0.0.18",
+    "ai": "^7.0.47",
+    "chrome-remote-interface": "^0.34.0",
+    "dotenv": "^16.4.7",
+    "langchain": "^1.5.4",
+    "puppeteer-core": "^24.43.1",
+    "twitter-api-v2": "^1.29.0",
+    "x-multi": "^1.0.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
