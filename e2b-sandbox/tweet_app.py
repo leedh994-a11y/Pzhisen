@@ -8,6 +8,7 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 from flask import Flask, jsonify, render_template_string, request
+from flask_cors import CORS
 
 from config import ROOT
 from tweet_pipeline import append_history, generate_tweet, post_tweet
@@ -15,6 +16,7 @@ from tweet_pipeline import append_history, generate_tweet, post_tweet
 load_dotenv(ROOT / ".env")
 
 app = Flask(__name__)
+CORS(app)
 
 PAGE = """
 <!doctype html>
