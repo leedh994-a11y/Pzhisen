@@ -56,10 +56,10 @@ def require_twitter_creds() -> dict[str, str]:
 
 
 def extract_tweet(text: str) -> str:
-    """Prefer fenced/json blocks; otherwise take first non-empty short paragraph."""
+    """Prefer fenced/json blocks; otherwise keep full generated body (no length cap)."""
     raw = text.strip()
-    # ```json {"tweet":"..."} ```
-    m = re.search(r"```(?:json)?\s*(\{.*?\})\s*```", raw, re.S | re.I)
+    # ```json {"tweet":"..."} ``` — allow long nested content
+    m = re.search(r"```(?:json)?\s*(\{.*\})\s*```", raw, re.S | re.I)
     if m:
         try:
             data = json.loads(m.group(1))
@@ -72,24 +72,23 @@ def extract_tweet(text: str) -> str:
     m = re.search(r"```(?:text|tweet)?\s*(.*?)\s*```", raw, re.S | re.I)
     if m and m.group(1).strip():
         return m.group(1).strip()
-    # plain first paragraph under 280 chars preferred
-    for block in re.split(r"\n\s*\n", raw):
-        line = block.strip().strip('"').strip("'")
-        if not line:
-            continue
-        if line.lower().startswith(("here", "sure", "i've", "i have", "以下", "推文")):
-            continue
-        return line[:280]
-    return raw[:280]
+    # Keep full plain text; strip only common wrapper lead-ins
+    lines = raw.splitlines()
+    while lines and lines[0].lower().startswith(
+        ("here", "sure", "i've", "i have", "以下", "推文", "okay", "ok,", "当然")
+    ):
+        lines.pop(0)
+    return "\n".join(lines).strip() or raw
 
 
 def generate_tweet(topic: str, lang: str, brand: str) -> str:
     prompt = f"""
 You are a social media copywriter for {brand}.
-Write ONE ready-to-post tweet about: {topic}
+Write ONE ready-to-post tweet/thread content about: {topic}
 Language: {lang}
 Constraints:
-- max 260 characters
+- NO character / word / length limit — write as long as needed for a complete post
+- do not truncate, summarize down, or force a short caption style unless the topic asks for it
 - no hashtag spam (at most 2 hashtags)
 - no quotation marks wrapping the whole tweet
 - return ONLY JSON in a fenced block:
