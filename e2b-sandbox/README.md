@@ -128,10 +128,20 @@ python tweet_pipeline.py --topic "Pzhisen AI agents that run your company overni
 python tweet_pipeline.py --topic "Pzhisen AI agents that run your company overnight"
 ```
 
-6. 接到 V0 应用：在 V0 后端加一个 API（例如 `POST /api/tweet`），内部执行上面的命令或复用同样逻辑：
-   - 生成：调百炼 / Claude Code sandbox
-   - 发布：调 `POST https://api.x.com/2/tweets`
-   - UI 只负责选题、预览、确认发送
+6. **一键 Web 界面（推荐）**：
+
+```bash
+python tweet_app.py
+# 打开 http://127.0.0.1:8787
+# 按钮：只生成 / 一键生成并发布 / 发布当前文案
+```
+
+API：
+- `POST /api/generate` — 只生成
+- `POST /api/one-click` — 生成并发布
+- `POST /api/publish` — 发布已有文案
+
+V0 应用可直接调用上述 API，把 UI 换成你的页面即可。
 
 ## 说明
 
