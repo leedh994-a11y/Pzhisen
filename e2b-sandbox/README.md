@@ -49,7 +49,26 @@ python build_template.py --from-image \
 
 构建成功后会写入 `.template-state.json`，后续创建沙箱自动读取模板名。控制台模板状态应为 `ready`。
 
-## 2) 创建沙箱并跑 Claude Code
+## 2) 长期使用（推荐）
+
+一次启动，反复提问；沙箱 ID 保存在 `.sandbox-state.json`，每次 prompt 自动续期：
+
+```bash
+# 启动长期沙箱（默认存活 3600 秒，可续期）
+python session.py start --timeout 3600
+
+# 单次任务
+python session.py prompt "Create a hello world HTTP server in Go"
+
+# 交互多轮（输入 /quit 退出交互，沙箱继续存活）
+python session.py shell
+
+# 查看状态 / 结束后销毁
+python session.py status
+python session.py stop
+```
+
+## 3) 一次性跑完即销毁
 
 冒烟（只验证启动与 `claude --version`）：
 
