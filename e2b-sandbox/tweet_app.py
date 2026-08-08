@@ -151,9 +151,9 @@ PAGE = """
         const data = await r.json();
         if (!r.ok) throw new Error(data.error || JSON.stringify(data));
         tweet.value = data.tweet;
-        const id = data.result?.data?.id;
-        const url = id ? ('https://x.com/Pzhise/status/' + id) : '';
-        show('发布成功' + (url ? '\\n' + url : '\\n' + JSON.stringify(data.result, null, 2)), true);
+        const url = data.result?.url || (data.result?.data?.id ? ('https://x.com/Pzhise/status/' + data.result.data.id) : '');
+        const n = data.result?.thread_count || 1;
+        show('发布成功' + (n > 1 ? '（已自动拆成 ' + n + ' 条线程）' : '') + (url ? '\\n' + url : '\\n' + JSON.stringify(data.result, null, 2)), true);
       } catch (e) { show('发布失败: ' + e.message, false); }
       finally { setBusy(false); }
     }
@@ -167,9 +167,9 @@ PAGE = """
         });
         const data = await r.json();
         if (!r.ok) throw new Error(data.error || JSON.stringify(data));
-        const id = data.result?.data?.id;
-        const url = id ? ('https://x.com/Pzhise/status/' + id) : '';
-        show('发布成功' + (url ? '\\n' + url : '\\n' + JSON.stringify(data.result, null, 2)), true);
+        const url = data.result?.url || (data.result?.data?.id ? ('https://x.com/Pzhise/status/' + data.result.data.id) : '');
+        const n = data.result?.thread_count || 1;
+        show('发布成功' + (n > 1 ? '（已自动拆成 ' + n + ' 条线程）' : '') + (url ? '\\n' + url : '\\n' + JSON.stringify(data.result, null, 2)), true);
       } catch (e) { show('发布失败: ' + e.message, false); }
       finally { setBusy(false); }
     }

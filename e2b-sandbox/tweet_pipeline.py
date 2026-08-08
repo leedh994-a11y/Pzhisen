@@ -106,9 +106,65 @@ Constraints:
     return extract_tweet(out)
 
 
+# X single-post hard limit is ~280 weighted chars; long AI copy must become a thread.
+MAX_POST_CHARS = 270
+
+
+def split_for_twitter(text: str, max_chars: int = MAX_POST_CHARS) -> list[str]:
+    """Split unlimited generated content into tweet-sized chunks for a thread."""
+    text = (text or "").strip()
+    if not text:
+        return []
+    if len(text) <= max_chars:
+        return [text]
+
+    chunks: list[str] = []
+    # Prefer paragraph / sentence boundaries
+    paragraphs = re.split(r"\n\s*\n+", text)
+    buf = ""
+    for para in paragraphs:
+        para = para.strip()
+        if not para:
+            continue
+        pieces = re.split(r"(?<=[.!?。！？])\s+", para) if len(para) > max_chars else [para]
+        for piece in pieces:
+            piece = piece.strip()
+            if not piece:
+                continue
+            # Hard-wrap oversized pieces
+            while len(piece) > max_chars:
+                cut = piece.rfind(" ", 0, max_chars)
+                if cut < max_chars // 2:
+                    cut = max_chars
+                part = piece[:cut].strip()
+                piece = piece[cut:].strip()
+                if buf:
+                    chunks.append(buf)
+                    buf = ""
+                chunks.append(part)
+            candidate = f"{buf}\n\n{piece}".strip() if buf else piece
+            if len(candidate) <= max_chars:
+                buf = candidate
+            else:
+                if buf:
+                    chunks.append(buf)
+                buf = piece
+    if buf:
+        chunks.append(buf)
+    return chunks or [text[:max_chars]]
+
+
 def post_tweet(text: str, dry_run: bool = False) -> dict:
+    """Post one tweet, or auto-thread when content exceeds X single-post limit."""
+    parts = split_for_twitter(text)
     if dry_run:
-        return {"dry_run": True, "text": text}
+        return {
+            "dry_run": True,
+            "text": text,
+            "parts": parts,
+            "thread_count": len(parts),
+        }
+
     creds = require_twitter_creds()
     auth = OAuth1(
         creds["TWITTER_API_KEY"],
@@ -116,15 +172,34 @@ def post_tweet(text: str, dry_run: bool = False) -> dict:
         creds["TWITTER_ACCESS_TOKEN"],
         creds["TWITTER_ACCESS_TOKEN_SECRET"],
     )
-    r = requests.post(
-        "https://api.x.com/2/tweets",
-        auth=auth,
-        json={"text": text},
-        timeout=30,
-    )
-    if r.status_code >= 300:
-        raise SystemExit(f"Twitter API error {r.status_code}: {r.text}")
-    return r.json()
+
+    posted: list[dict] = []
+    reply_to: str | None = None
+    for i, part in enumerate(parts):
+        payload: dict = {"text": part}
+        if reply_to:
+            payload["reply"] = {"in_reply_to_tweet_id": reply_to}
+        r = requests.post(
+            "https://api.x.com/2/tweets",
+            auth=auth,
+            json=payload,
+            timeout=30,
+        )
+        if r.status_code >= 300:
+            raise SystemExit(
+                f"Twitter API error {r.status_code} on thread part {i + 1}/{len(parts)}: {r.text}"
+            )
+        data = r.json()
+        posted.append(data)
+        reply_to = data.get("data", {}).get("id") or reply_to
+
+    first_id = posted[0].get("data", {}).get("id") if posted else None
+    return {
+        "data": posted[0].get("data") if posted else None,
+        "thread": posted,
+        "thread_count": len(posted),
+        "url": f"https://x.com/Pzhise/status/{first_id}" if first_id else None,
+    }
 
 
 def append_history(record: dict) -> None:
