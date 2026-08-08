@@ -14,7 +14,7 @@ STATE_FILE = ROOT / ".template-state.json"
 load_dotenv(ROOT / ".env")
 
 DEFAULT_FROM_IMAGE = (
-    "fc-e2b-registry.cn-beijing.cr.aliyuncs.com/runtime/claude-code:v0.0.37"
+    "fc-e2b-registry.cn-hangzhou.cr.aliyuncs.com/runtime/claude-code:v0.0.37"
 )
 DEFAULT_TEMPLATE_NAME = "claude-code"
 
@@ -32,10 +32,10 @@ def e2b_opts() -> dict[str, str]:
     return {
         "api_key": require_env("E2B_API_KEY"),
         "api_url": os.getenv(
-            "E2B_API_URL", "https://api.cn-beijing.e2b.fc.aliyuncs.com"
+            "E2B_API_URL", "https://api.cn-hangzhou.e2b.fc.aliyuncs.com"
         ).strip(),
         "domain": os.getenv(
-            "E2B_DOMAIN", "cn-beijing.e2b.fc.aliyuncs.com"
+            "E2B_DOMAIN", "cn-hangzhou.e2b.fc.aliyuncs.com"
         ).strip(),
     }
 

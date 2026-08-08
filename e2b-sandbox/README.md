@@ -25,11 +25,13 @@ cp .env.example .env
 python build_template.py
 ```
 
-等价于官方示例（北京地域）：
+默认按杭州地域（与 API Key 所属地域一致）：
 
-- 镜像：`fc-e2b-registry.cn-beijing.cr.aliyuncs.com/runtime/claude-code:v0.0.37`
+- 镜像：`fc-e2b-registry.cn-hangzhou.cr.aliyuncs.com/runtime/claude-code:v0.0.37`
 - 规格：`cpu_count=2`，`memory_mb=8192`
-- 接入：`api.cn-beijing.e2b.fc.aliyuncs.com`
+- 接入：`api.cn-hangzhou.e2b.fc.aliyuncs.com`
+
+若 Key 在北京创建，把 `.env` 里的 `E2B_API_URL` / `E2B_DOMAIN` / `E2B_FROM_IMAGE` 改成 `cn-beijing`。
 
 常用参数：
 
@@ -72,8 +74,8 @@ python run_sandbox.py --keep-alive --prompt "List files in /home/user"
 | 变量 | 说明 |
 |---|---|
 | `E2B_API_KEY` | 云沙箱 API Key |
-| `E2B_API_URL` | 默认北京 `https://api.cn-beijing.e2b.fc.aliyuncs.com` |
-| `E2B_DOMAIN` | 默认 `cn-beijing.e2b.fc.aliyuncs.com` |
+| `E2B_API_URL` | 默认杭州 `https://api.cn-hangzhou.e2b.fc.aliyuncs.com` |
+| `E2B_DOMAIN` | 默认 `cn-hangzhou.e2b.fc.aliyuncs.com` |
 | `E2B_FROM_IMAGE` | Claude Code 预置镜像 |
 | `E2B_TEMPLATE_NAME` | 模板名，默认 `claude-code` |
 | `BAILIAN_API_KEY` | 百炼 Key，注入为 `ANTHROPIC_AUTH_TOKEN` |
