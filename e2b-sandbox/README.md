@@ -100,9 +100,43 @@ python run_sandbox.py --keep-alive --prompt "List files in /home/user"
 | `BAILIAN_API_KEY` | 百炼 Key，注入为 `ANTHROPIC_AUTH_TOKEN` |
 | `ANTHROPIC_MODEL` | 默认 `qwen3.7-max` |
 
+## 4) AI 写推文并自动发到 Twitter/X
+
+整体链路：
+
+```text
+V0 Web 应用（选题/审核 UI）
+    ↓ 调用或人工触发
+Claude Code 云沙箱（百炼 Token 生成文案）
+    ↓
+X/Twitter API（Access Token 发推）
+```
+
+1. 去 [X Developer Portal](https://developer.x.com/) 创建 App，权限选 **Read and Write**
+2. 复制 4 个密钥到 `.env`：`TWITTER_API_KEY` / `TWITTER_API_SECRET` / `TWITTER_ACCESS_TOKEN` / `TWITTER_ACCESS_TOKEN_SECRET`
+3. 确保长期沙箱已启动：`python session.py start`
+4. 先干跑（只生成不发）：
+
+```bash
+pip install -r requirements.txt
+python tweet_pipeline.py --topic "Pzhisen AI agents that run your company overnight" --dry-run
+```
+
+5. 确认文案后真实发推：
+
+```bash
+python tweet_pipeline.py --topic "Pzhisen AI agents that run your company overnight"
+```
+
+6. 接到 V0 应用：在 V0 后端加一个 API（例如 `POST /api/tweet`），内部执行上面的命令或复用同样逻辑：
+   - 生成：调百炼 / Claude Code sandbox
+   - 发布：调 `POST https://api.x.com/2/tweets`
+   - UI 只负责选题、预览、确认发送
+
 ## 说明
 
 - 同一模板名可反复 `Sandbox.create()`，不必每次重新 build
 - 首次进沙箱会执行 `echo '{}' > ~/.claude.json`，避免配置损坏
 - 非交互用 `claude -p`，并加 `--dangerously-skip-permissions` 与 `< /dev/null`
 - 官方依赖版本：`e2b==2.31.0`、`e2b-code-interpreter==2.8.1`
+- X API 发推通常需付费/按量套餐；App-only Bearer 不能发推，必须用户 Access Token

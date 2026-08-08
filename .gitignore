@@ -68,4 +68,5 @@ e2b-sandbox/.env
 e2b-sandbox/.venv/
 e2b-sandbox/.template-state.json
 e2b-sandbox/.sandbox-state.json
+e2b-sandbox/.tweet-history.jsonl
 e2b-sandbox/**/__pycache__/
