@@ -37,6 +37,44 @@ load_dotenv(ROOT / ".env")
 
 HISTORY_FILE = ROOT / ".tweet-history.jsonl"
 
+# Never auto-publish quiz/test tweets to @Pzhise.
+TEST_MARKERS = (
+    "测试",
+    "测验",
+    "试发",
+    "试运行",
+    "连通性",
+    "联调",
+    "test",
+    "testing",
+    "quiz",
+    "dry-run",
+    "dry run",
+    "connectivity",
+    "ops check",
+    "publish path ok",
+    "check ",
+    " check",
+)
+
+
+def is_test_content(*parts: str | None) -> bool:
+    """Return True if topic/tweet looks like a test/quiz post."""
+    blob = " ".join(p for p in parts if p).strip().lower()
+    if not blob:
+        return False
+    return any(marker.lower() in blob for marker in TEST_MARKERS)
+
+
+def assert_not_test_publish(topic: str | None, text: str | None, *, force: bool = False) -> None:
+    if force:
+        return
+    if is_test_content(topic, text):
+        raise SystemExit(
+            "已拦截：检测为「测试/测验」类推文，禁止自动发布到 @Pzhise。"
+            " 仅可生成预览；正式内容请去掉测试字样后再发布。"
+        )
+
 
 def require_twitter_creds() -> dict[str, str]:
     keys = [
@@ -190,7 +228,13 @@ def split_for_twitter(text: str, max_chars: int = MAX_POST_CHARS) -> list[str]:
     return chunks or [text[: max_chars // 2]]
 
 
-def post_tweet(text: str, dry_run: bool = False) -> dict:
+def post_tweet(
+    text: str,
+    dry_run: bool = False,
+    *,
+    topic: str | None = None,
+    force_publish_test: bool = False,
+) -> dict:
     """Post one tweet, or auto-thread when content exceeds X single-post limit."""
     import time
 
@@ -201,7 +245,10 @@ def post_tweet(text: str, dry_run: bool = False) -> dict:
             "text": text,
             "parts": parts,
             "thread_count": len(parts),
+            "blocked_test_publish": is_test_content(topic, text),
         }
+
+    assert_not_test_publish(topic, text, force=force_publish_test)
 
     creds = require_twitter_creds()
     auth = OAuth1(
@@ -266,6 +313,11 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--brand", default="Pzhisen", help="Brand voice")
     p.add_argument("--dry-run", action="store_true", help="Only generate, do not post")
     p.add_argument("--post-text", default=None, help="Skip generation; post this text")
+    p.add_argument(
+        "--force-publish-test",
+        action="store_true",
+        help="DANGEROUS: override test-tweet publish block (not exposed in web UI)",
+    )
     return p.parse_args()
 
 
@@ -281,7 +333,15 @@ def main() -> None:
     print("--- tweet ---")
     print(tweet)
     print("-------------")
-    result = post_tweet(tweet, dry_run=args.dry_run)
+    if is_test_content(args.topic, tweet) and not args.dry_run and not args.force_publish_test:
+        print("检测到测试/测验内容：已强制改为只生成、不发布到 @Pzhise")
+        args.dry_run = True
+    result = post_tweet(
+        tweet,
+        dry_run=args.dry_run,
+        topic=args.topic,
+        force_publish_test=args.force_publish_test,
+    )
     print(json.dumps(result, ensure_ascii=False, indent=2))
     append_history(
         {

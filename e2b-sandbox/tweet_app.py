@@ -11,7 +11,12 @@ from flask import Flask, jsonify, render_template_string, request
 from flask_cors import CORS
 
 from config import ROOT
-from tweet_pipeline import append_history, generate_tweet, post_tweet
+from tweet_pipeline import (
+    append_history,
+    generate_tweet,
+    is_test_content,
+    post_tweet,
+)
 
 load_dotenv(ROOT / ".env")
 
@@ -81,6 +86,7 @@ PAGE = """
     <p class="sub">
       Claude Code 云沙箱生成文案 → X/Twitter API 发布到
       <a href="https://x.com/Pzhise" target="_blank" rel="noreferrer">@Pzhise</a>
+      <br/>测试/测验类推文会被永久拦截，不会自动发布到 @Pzhise。
     </p>
 
     <label for="topic">主题 / Brief</label>
@@ -206,13 +212,20 @@ def api_generate():
 def api_publish():
     body = request.get_json(force=True, silent=True) or {}
     tweet = (body.get("tweet") or "").strip()
+    topic = (body.get("topic") or "").strip()
     if not tweet:
         return jsonify({"error": "tweet is required"}), 400
+    if is_test_content(topic, tweet):
+        return jsonify({
+            "error": "已拦截：测试/测验类推文禁止发布到 @Pzhise，仅可生成预览。",
+            "tweet": tweet,
+            "blocked": True,
+        }), 403
     try:
-        result = post_tweet(tweet, dry_run=False)
+        result = post_tweet(tweet, dry_run=False, topic=topic)
         append_history(
             {
-                "topic": body.get("topic"),
+                "topic": topic,
                 "tweet": tweet,
                 "source": "ui-publish",
                 "result": result,
@@ -237,7 +250,21 @@ def api_one_click():
             lang=(body.get("lang") or "en").strip(),
             brand=(body.get("brand") or "Pzhisen").strip(),
         )
-        result = post_tweet(tweet, dry_run=False)
+        if is_test_content(topic, tweet):
+            append_history(
+                {
+                    "topic": topic,
+                    "tweet": tweet,
+                    "source": "ui-one-click-blocked-test",
+                    "result": {"blocked": True},
+                }
+            )
+            return jsonify({
+                "error": "已拦截：检测为测试/测验推文，已生成但不发布到 @Pzhise。",
+                "tweet": tweet,
+                "blocked": True,
+            }), 403
+        result = post_tweet(tweet, dry_run=False, topic=topic)
         append_history(
             {
                 "topic": topic,
