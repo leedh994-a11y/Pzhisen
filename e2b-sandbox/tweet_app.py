@@ -86,6 +86,7 @@ PAGE = """
     <p class="sub">
       Claude Code 云沙箱生成文案 → X/Twitter API 发布到
       <a href="https://x.com/Pzhise" target="_blank" rel="noreferrer">@Pzhise</a>
+      <br/>以后每条自动发布推文都是<strong>一条完整整体</strong>（不再拆成多段线程）。
       <br/>测试/测验类推文会被永久拦截，不会自动发布到 @Pzhise。
     </p>
 
@@ -158,8 +159,7 @@ PAGE = """
         if (!r.ok) throw new Error(data.error || JSON.stringify(data));
         tweet.value = data.tweet;
         const url = data.result?.url || (data.result?.data?.id ? ('https://x.com/Pzhise/status/' + data.result.data.id) : '');
-        const n = data.result?.thread_count || 1;
-        show('发布成功' + (n > 1 ? '（已自动拆成 ' + n + ' 条线程）' : '') + (url ? '\\n' + url : '\\n' + JSON.stringify(data.result, null, 2)), true);
+        show('发布成功（单条完整推文）' + (url ? '\\n' + url : '\\n' + JSON.stringify(data.result, null, 2)), true);
       } catch (e) { show('发布失败: ' + e.message, false); }
       finally { setBusy(false); }
     }
@@ -174,8 +174,7 @@ PAGE = """
         const data = await r.json();
         if (!r.ok) throw new Error(data.error || JSON.stringify(data));
         const url = data.result?.url || (data.result?.data?.id ? ('https://x.com/Pzhise/status/' + data.result.data.id) : '');
-        const n = data.result?.thread_count || 1;
-        show('发布成功' + (n > 1 ? '（已自动拆成 ' + n + ' 条线程）' : '') + (url ? '\\n' + url : '\\n' + JSON.stringify(data.result, null, 2)), true);
+        show('发布成功（单条完整推文）' + (url ? '\\n' + url : '\\n' + JSON.stringify(data.result, null, 2)), true);
       } catch (e) { show('发布失败: ' + e.message, false); }
       finally { setBusy(false); }
     }

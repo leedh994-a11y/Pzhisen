@@ -122,10 +122,12 @@ def extract_tweet(text: str) -> str:
 def generate_tweet(topic: str, lang: str, brand: str) -> str:
     prompt = f"""
 You are a social media copywriter for {brand}.
-Write ONE ready-to-post tweet/thread content about: {topic}
+Write ONE single complete ready-to-post tweet about: {topic}
 Language: {lang}
 Constraints:
-- NO character / word / length limit — write as long as needed for a complete post
+- Write as ONE whole post only — never a thread, never numbered parts, never split sections meant for separate tweets
+- Put ALL copy together in a single continuous body
+- NO character / word / length limit — write as long as needed, but still as one undivided post
 - do not truncate, summarize down, or force a short caption style unless the topic asks for it
 - no hashtag spam (at most 2 hashtags)
 - no quotation marks wrapping the whole tweet
@@ -144,90 +146,6 @@ Constraints:
     return extract_tweet(out)
 
 
-# Keep chunks under X's practical limit (emoji/CJK/URL inflate weighted length).
-MAX_POST_CHARS = 240
-
-
-def twitter_weight(text: str) -> int:
-    """Approximate X weighted length: CJK/emoji-ish => 2, ASCII => 1, URLs => 23."""
-    # Collapse URLs first
-    urls = re.findall(r"https?://\S+", text)
-    tmp = text
-    for u in urls:
-        tmp = tmp.replace(u, "")
-    weight = 23 * len(urls)
-    for ch in tmp:
-        o = ord(ch)
-        # Broad non-latin / symbol range often counts as 2
-        if o > 0x024F or ch in "—–“”‘’…":
-            weight += 2
-        else:
-            weight += 1
-    return weight
-
-
-def split_for_twitter(text: str, max_chars: int = MAX_POST_CHARS) -> list[str]:
-    """Split unlimited generated content into tweet-sized chunks for a thread."""
-    text = (text or "").strip()
-    if not text:
-        return []
-    if twitter_weight(text) <= max_chars:
-        return [text]
-
-    chunks: list[str] = []
-    paragraphs = re.split(r"\n\s*\n+", text)
-    buf = ""
-
-    def flush() -> None:
-        nonlocal buf
-        if buf.strip():
-            chunks.append(buf.strip())
-        buf = ""
-
-    def fits(s: str) -> bool:
-        return twitter_weight(s) <= max_chars
-
-    for para in paragraphs:
-        para = para.strip()
-        if not para:
-            continue
-        pieces = re.split(r"(?<=[.!?。！？])\s+", para) if not fits(para) else [para]
-        for piece in pieces:
-            piece = piece.strip()
-            if not piece:
-                continue
-            while not fits(piece) and len(piece) > 20:
-                # Binary-ish trim by characters until weighted length fits
-                lo, hi = 20, len(piece)
-                cut = hi // 2
-                best = 20
-                while lo <= hi:
-                    mid = (lo + hi) // 2
-                    # prefer break at space
-                    trial = piece[:mid]
-                    sp = trial.rfind(" ")
-                    if sp >= mid // 2:
-                        trial = trial[:sp]
-                    if fits(trial.strip()):
-                        best = len(trial)
-                        lo = mid + 1
-                    else:
-                        hi = mid - 1
-                part = piece[:best].strip()
-                piece = piece[best:].strip()
-                if buf:
-                    flush()
-                chunks.append(part)
-            candidate = f"{buf}\n\n{piece}".strip() if buf else piece
-            if fits(candidate):
-                buf = candidate
-            else:
-                flush()
-                buf = piece
-    flush()
-    return chunks or [text[: max_chars // 2]]
-
-
 def post_tweet(
     text: str,
     dry_run: bool = False,
@@ -235,20 +153,22 @@ def post_tweet(
     topic: str | None = None,
     force_publish_test: bool = False,
 ) -> dict:
-    """Post one tweet, or auto-thread when content exceeds X single-post limit."""
+    """Always publish as ONE single complete tweet — never split into a thread."""
     import time
 
-    parts = split_for_twitter(text)
+    body = (text or "").strip()
     if dry_run:
         return {
             "dry_run": True,
-            "text": text,
-            "parts": parts,
-            "thread_count": len(parts),
-            "blocked_test_publish": is_test_content(topic, text),
+            "text": body,
+            "thread_count": 1,
+            "single_post": True,
+            "blocked_test_publish": is_test_content(topic, body),
         }
 
-    assert_not_test_publish(topic, text, force=force_publish_test)
+    assert_not_test_publish(topic, body, force=force_publish_test)
+    if not body:
+        raise SystemExit("Empty tweet text")
 
     creds = require_twitter_creds()
     auth = OAuth1(
@@ -258,47 +178,34 @@ def post_tweet(
         creds["TWITTER_ACCESS_TOKEN_SECRET"],
     )
 
-    posted: list[dict] = []
-    reply_to: str | None = None
-    for i, part in enumerate(parts):
-        payload: dict = {"text": part}
-        if reply_to:
-            payload["reply"] = {"in_reply_to_tweet_id": reply_to}
+    last_err = None
+    for attempt in range(3):
+        r = requests.post(
+            "https://api.x.com/2/tweets",
+            auth=auth,
+            json={"text": body},
+            timeout=30,
+        )
+        if r.status_code < 300:
+            data = r.json()
+            tweet_id = data.get("data", {}).get("id")
+            return {
+                "data": data.get("data"),
+                "thread_count": 1,
+                "single_post": True,
+                "url": f"https://x.com/Pzhise/status/{tweet_id}" if tweet_id else None,
+            }
+        last_err = f"Twitter API error {r.status_code}: {r.text}"
+        if r.status_code in {403, 429, 500, 502, 503} and attempt < 2:
+            time.sleep(1.5 * (attempt + 1))
+            continue
+        break
 
-        last_err = None
-        for attempt in range(3):
-            r = requests.post(
-                "https://api.x.com/2/tweets",
-                auth=auth,
-                json=payload,
-                timeout=30,
-            )
-            if r.status_code < 300:
-                data = r.json()
-                posted.append(data)
-                reply_to = data.get("data", {}).get("id") or reply_to
-                last_err = None
-                break
-            last_err = f"Twitter API error {r.status_code} on thread part {i + 1}/{len(parts)}: {r.text}"
-            # Retry transient / rate / intermittent forbidden
-            if r.status_code in {403, 429, 500, 502, 503} and attempt < 2:
-                time.sleep(1.5 * (attempt + 1))
-                continue
-            break
-        if last_err:
-            raise SystemExit(
-                last_err
-                + "\n提示：账号可读可写正常时，403 常见于限流、重复内容或单条仍超限。"
-                + " 可点「只生成」换一版文案后重试，或把首条改短再发。"
-            )
-
-    first_id = posted[0].get("data", {}).get("id") if posted else None
-    return {
-        "data": posted[0].get("data") if posted else None,
-        "thread": posted,
-        "thread_count": len(posted),
-        "url": f"https://x.com/Pzhise/status/{first_id}" if first_id else None,
-    }
+    raise SystemExit(
+        (last_err or "Twitter publish failed")
+        + "\n提示：已按「单条完整推文」发布（不再拆分）。"
+        + " 若内容过长被拒，请为 @Pzhise 开通支持长文的 X Premium，或缩短后再发。"
+    )
 
 
 def append_history(record: dict) -> None:
