@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "gingiris-twitter-agent-ops": {
+      "source": "Gingiris-1031/gingiris-twitter-agent-ops",
+      "sourceType": "github",
+      "skillPath": "SKILL.md",
+      "computedHash": "8f6a060617e2af1a182aa7cd872085c521f032511faacafbb90ac2ab6ce33402"
+    }
+  }
+}
