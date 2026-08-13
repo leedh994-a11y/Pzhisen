@@ -1,5 +1,14 @@
 # Pzhisen promo videos
 
+## Chinese abiao channel banner
+
+Orange-to-purple banner translated from the English intro (name: abiao):
+
+- **手机一键下载（宽版封面 PNG）：** https://github.com/leedh994-a11y/Pzhisen/raw/cursor/axi-banner-chinese-69fd/promo/banners/axi-banner-zh.png
+- **手机一键下载（YouTube 2560×1440）：** https://github.com/leedh994-a11y/Pzhisen/raw/cursor/axi-banner-chinese-69fd/promo/banners/axi-banner-zh-youtube.png
+- Phone page: `promo/download-banner-zh.html`
+- Rebuild: `python3 promo/scripts/make_axi_banner_zh.py`
+
 ## Chinese edit: Polsia → Pzhisen, founder → Bob
 
 Edited vertical cut from the shared WeChat/Tencent source clip:
