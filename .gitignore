@@ -62,3 +62,14 @@ promo/assets/versions-en-v11/**/script.txt
 promo/versions-en-v11/*-silent.mp4
 promo/assets/versions-en-v11/**/*.ass
 __pycache__/
+
+# Aliyun E2B Claude Code sandbox
+e2b-sandbox/.env
+e2b-sandbox/.venv/
+e2b-sandbox/.template-state.json
+e2b-sandbox/.sandbox-state.json
+e2b-sandbox/.tweet-history.jsonl
+e2b-sandbox/**/__pycache__/
+twitter-ops/logs/tuesday-publish-daemon.log
+twitter-ops/logs/*-daemon.log
+twitter-ops/logs/tuesday-publish-result.json
