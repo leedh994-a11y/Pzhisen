@@ -1,5 +1,14 @@
 # Pzhisen promo videos
 
+## English channel banner
+
+Wide teal-to-violet banner (Chinese original translated to English):
+
+- **手机一键下载（宽版封面 PNG）：** https://github.com/leedh994-a11y/Pzhisen/raw/cursor/youtube-banner-english-69fd/promo/banners/ai-channel-banner-en.png
+- **手机一键下载（YouTube 2560×1440）：** https://github.com/leedh994-a11y/Pzhisen/raw/cursor/youtube-banner-english-69fd/promo/banners/ai-channel-banner-en-youtube.png
+- Phone page (preview + save): `promo/download-banner-en.html`
+- Rebuild: `python3 promo/scripts/make_ai_channel_banner_en.py`
+
 ## Chinese edit: Polsia → Pzhisen, founder → Bob
 
 Edited vertical cut from the shared WeChat/Tencent source clip:
