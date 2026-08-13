@@ -22,7 +22,7 @@ FONT_BOLD = "/tmp/fonts/NotoSansSC-Bold.otf"
 FONT_REGULAR = "/tmp/fonts/NotoSansSC-Regular.otf"
 FONT_FALLBACK = "/usr/share/fonts/truetype/wqy/wqy-microhei.ttc"
 
-TITLE = "你好，我是 axi！"
+TITLE = "你好，我是 abiao！"
 SUBTITLE = "我是一名独立开发者，持续分享有价值的内容。"
 CTA = "关注我！"
 

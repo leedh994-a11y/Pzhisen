@@ -1,8 +1,8 @@
 # Pzhisen promo videos
 
-## Chinese axi channel banner
+## Chinese abiao channel banner
 
-Orange-to-purple banner translated from the English axi intro:
+Orange-to-purple banner translated from the English intro (name: abiao):
 
 - **手机一键下载（宽版封面 PNG）：** https://github.com/leedh994-a11y/Pzhisen/raw/cursor/axi-banner-chinese-69fd/promo/banners/axi-banner-zh.png
 - **手机一键下载（YouTube 2560×1440）：** https://github.com/leedh994-a11y/Pzhisen/raw/cursor/axi-banner-chinese-69fd/promo/banners/axi-banner-zh-youtube.png
