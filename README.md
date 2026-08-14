@@ -1,5 +1,20 @@
 # Pzhisen promo videos
 
+## English channel banner — 4 color variants
+
+Same English text, layout, and arrow as the original teal banner. Only the background gradient changes.
+
+Phone page (preview + save all 4): `promo/download-banner-en-colors.html`
+
+| Color | Wide 2560×854 | YouTube 2560×1440 |
+|---|---|---|
+| Sunset (orange → gold) | [download](https://github.com/leedh994-a11y/Pzhisen/raw/cursor/banner-color-variants-ee69/promo/banners/ai-channel-banner-en-sunset.png) | [download](https://github.com/leedh994-a11y/Pzhisen/raw/cursor/banner-color-variants-ee69/promo/banners/ai-channel-banner-en-sunset-youtube.png) |
+| Magenta (violet → pink) | [download](https://github.com/leedh994-a11y/Pzhisen/raw/cursor/banner-color-variants-ee69/promo/banners/ai-channel-banner-en-magenta.png) | [download](https://github.com/leedh994-a11y/Pzhisen/raw/cursor/banner-color-variants-ee69/promo/banners/ai-channel-banner-en-magenta-youtube.png) |
+| Forest (green) | [download](https://github.com/leedh994-a11y/Pzhisen/raw/cursor/banner-color-variants-ee69/promo/banners/ai-channel-banner-en-forest.png) | [download](https://github.com/leedh994-a11y/Pzhisen/raw/cursor/banner-color-variants-ee69/promo/banners/ai-channel-banner-en-forest-youtube.png) |
+| Graphite (charcoal) | [download](https://github.com/leedh994-a11y/Pzhisen/raw/cursor/banner-color-variants-ee69/promo/banners/ai-channel-banner-en-graphite.png) | [download](https://github.com/leedh994-a11y/Pzhisen/raw/cursor/banner-color-variants-ee69/promo/banners/ai-channel-banner-en-graphite-youtube.png) |
+
+Rebuild: `python3 promo/scripts/make_ai_channel_banner_en_colors.py`
+
 ## Chinese edit: Polsia → Pzhisen, founder → Bob
 
 Edited vertical cut from the shared WeChat/Tencent source clip:

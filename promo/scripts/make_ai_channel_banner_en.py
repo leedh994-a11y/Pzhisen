@@ -38,22 +38,22 @@ def lerp_color(c0: tuple[int, int, int], c1: tuple[int, int, int], t: float) -> 
     )
 
 
-def color_at(t: float) -> tuple[int, int, int]:
+def color_at(t: float, stops: tuple = STOPS) -> tuple[int, int, int]:
     t = max(0.0, min(1.0, t))
-    for i in range(len(STOPS) - 1):
-        t0, c0 = STOPS[i]
-        t1, c1 = STOPS[i + 1]
+    for i in range(len(stops) - 1):
+        t0, c0 = stops[i]
+        t1, c1 = stops[i + 1]
         if t <= t1:
             u = 0.0 if t1 == t0 else (t - t0) / (t1 - t0)
             return lerp_color(c0, c1, u)
-    return STOPS[-1][1]
+    return stops[-1][1]
 
 
-def make_gradient(width: int, height: int) -> Image.Image:
+def make_gradient(width: int, height: int, stops: tuple = STOPS) -> Image.Image:
     img = Image.new("RGB", (width, height))
     px = img.load()
     for x in range(width):
-        rgb = color_at(x / max(width - 1, 1))
+        rgb = color_at(x / max(width - 1, 1), stops)
         for y in range(height):
             px[x, y] = rgb
     return img
@@ -154,8 +154,10 @@ def centered_text_block(
         y += lh + line_gap
 
 
-def render_banner(width: int, height: int, scale: float) -> Image.Image:
-    base = make_gradient(width, height).convert("RGBA")
+def render_banner(
+    width: int, height: int, scale: float, stops: tuple = STOPS
+) -> Image.Image:
+    base = make_gradient(width, height, stops).convert("RGBA")
     overlay = Image.new("RGBA", (width, height), (0, 0, 0, 0))
     draw = ImageDraw.Draw(overlay)
 
